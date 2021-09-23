@@ -36,6 +36,7 @@ include "spring-webmvc"
 include "spring-websocket"
 include "framework-bom"
 include "integration-tests"
+include 'xp-alive'
 
 rootProject.name = "spring"
 rootProject.children.each {project ->
@@ -51,7 +52,7 @@ settings.gradle.projectsLoaded {
 			buildScanPublished { scan ->
 				if (buildDir.exists()) {
 					new File(buildDir, "build-scan-uri.txt").text = "${scan.buildScanUri}\n"
-				} 
+				}
 			}
 		}
 	}
