@@ -12,6 +12,6 @@ public class Test {
 //		context.register(AppConfig.class);
 //		context.refresh();
 		OrderService orderService = context.getBean("orderService", OrderService.class);
-		UserService userService = context.getBean("userService", UserService.class);
+//		UserService userService = context.getBean("userService", UserService.class);
 	}
 }
