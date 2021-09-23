@@ -1,7 +1,6 @@
 package com.xiongping;
 
 import com.xiongping.service.OrderService;
-import com.xiongping.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Test {
@@ -12,6 +11,7 @@ public class Test {
 //		context.register(AppConfig.class);
 //		context.refresh();
 		OrderService orderService = context.getBean("orderService", OrderService.class);
+		System.out.println(orderService);
 //		UserService userService = context.getBean("userService", UserService.class);
 	}
 }
