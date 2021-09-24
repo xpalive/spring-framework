@@ -112,4 +112,7 @@
 	<suppress files="sockjs[\\/]transport[\\/]TransportType" checks="JavadocVariable" />
 	<suppress files="src[\\/]test[\\/]java[\\/]org[\\/]springframework[\\/]web[\\/]reactive[\\/]protobuf[\\/].*" checks=".*" />
 
+	<!-- xp-alive -->
+	<suppress files="src[\\/]main[\\/]java[\\/]com[\\/]xiongping[\\/].*" checks=".*" />
+
 </suppressions>
