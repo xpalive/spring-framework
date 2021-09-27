@@ -566,7 +566,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 			try {
 				// Allows post-processing of the bean factory in context subclasses.
-				// 没有做任何事，这里是个空方法
+				// 没有做任何事，这里是个空方法,由子类执行，
+				// AnnotationConfigApplicationContext没有实现该方法
+				// 所以这里执行的是AbstractApplicationContext的默认方法
 				postProcessBeanFactory(beanFactory);
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
