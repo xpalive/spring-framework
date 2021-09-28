@@ -556,7 +556,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			/*
 			配置BeanFactory,
 			设置类加载器，
-			是否忽略表达式，
+			是否忽略Spel表达式，
 			添加bean后置处理器ApplicationContextAwareProcessor，
 			添加需要忽略的依赖接口，
 			注册依赖解析器，
@@ -580,21 +580,27 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				beanPostProcess.end();
 
 				// Initialize message source for this context.
+				//国际化
 				initMessageSource();
 
 				// Initialize event multicaster for this context.
+				//事件广播
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
+				//初始化一些其他的bean
 				onRefresh();
 
 				// Check for listener beans and register them.
+				//注册监听器
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
+				//实例化非懒加载的单例bean
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
+				//发布相应的事件
 				finishRefresh();
 			}
 
@@ -643,10 +649,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Initialize any placeholder property sources in the context environment.
+		// 读取属性文件?
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
 		// see ConfigurablePropertyResolver#setRequiredProperties
+		// 验证必填的属性文件
 		getEnvironment().validateRequiredProperties();
 
 		// Store pre-refresh ApplicationListeners...
