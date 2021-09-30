@@ -73,8 +73,11 @@ final class PostProcessorRegistrationDelegate {
 		// https://github.com/spring-projects/spring-framework/issues?q=PostProcessorRegistrationDelegate+is%3Aclosed+label%3A%22status%3A+declined%22
 
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
+
+		//为了保证 PriorityOrdered 和 Ordered processor 的顺序性 所以使用了多次循环和多个list
 		Set<String> processedBeans = new HashSet<>();
 		// 判断beanFactory是不是BeanDefinitionRegistry的子类
+		// 这里的beanFactory是DefaultListableBeanFactory 是BeanDefinitionRegistry的子类
 		if (beanFactory instanceof BeanDefinitionRegistry) {
 			BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
 			// 常规的BeanFactoryPostProcessor
@@ -85,6 +88,7 @@ final class PostProcessorRegistrationDelegate {
 			// 区分传入的BeanFactoryPostProcessors中的Bean的具体类型
 			// 是常规的BeanFactoryPostProcessor
 			// 还是BeanFactoryRegistryPostProcessor
+			// 这里是空的
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {
 					BeanDefinitionRegistryPostProcessor registryProcessor =
@@ -106,6 +110,7 @@ final class PostProcessorRegistrationDelegate {
 
 			// First, invoke the BeanDefinitionRegistryPostProcessors that implement PriorityOrdered.
 			// 在beanFactory中
+			// 获取后置处理器名称
 			String[] postProcessorNames =
 					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
