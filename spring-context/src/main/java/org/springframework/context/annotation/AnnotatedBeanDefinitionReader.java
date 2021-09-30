@@ -250,9 +250,9 @@ public class AnnotatedBeanDefinitionReader {
 			@Nullable Class<? extends Annotation>[] qualifiers, @Nullable Supplier<T> supplier,
 			@Nullable BeanDefinitionCustomizer[] customizers) {
 
-		//创建BeanDefinition
+		// 创建BeanDefinition
 		AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(beanClass);
-		//判断是否需要跳过Bean注册 ——> @Conditional 注解处理
+		// 判断是否需要跳过Bean注册 ——> @Conditional 注解处理
 		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {
 			return;
 		}
@@ -261,8 +261,9 @@ public class AnnotatedBeanDefinitionReader {
 
 		// 处理scope
 		ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(abd);
-		//处理Scope 如：singleton、prototype,默认为singleton
+		// 处理Scope 如：singleton、prototype,默认为singleton
 		abd.setScope(scopeMetadata.getScopeName());
+		// 生成Bean的名字
 		String beanName = (name != null ? name : this.beanNameGenerator.generateBeanName(abd, this.registry));
 
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(abd);
