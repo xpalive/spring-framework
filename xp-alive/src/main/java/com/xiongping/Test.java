@@ -15,7 +15,7 @@ public class Test {
 //		OrderService orderService = context.getBean("orderService", OrderService.class);
 //		System.out.println(orderService);
 //		UserService userService = context.getBean("userService", UserService.class);
-		XiongpingFactoryBean xiongpingFactoryBean = context.getBean("xiongpingFactoryBean", XiongpingFactoryBean.class);
+		XiongpingFactoryBean xiongpingFactoryBean = context.getBean("&xiongpingFactoryBean", XiongpingFactoryBean.class);
 		System.out.println(xiongpingFactoryBean);
 	}
 }

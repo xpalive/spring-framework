@@ -910,6 +910,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		return (this.configurationFrozen || super.isBeanEligibleForMetadataCaching(beanName));
 	}
 
+	//提前实例化单例bean
 	@Override
 	public void preInstantiateSingletons() throws BeansException {
 		if (logger.isTraceEnabled()) {
@@ -928,6 +929,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
 				//判断factoryBean，判断是否以&开头的beanName
 				if (isFactoryBean(beanName)) {
+					// 如果bean是BeanFactory，并且还是SmartFactoryBean的子类，isEagerInit设置为true时就会直接获取bean
+					// 这一步是先获取BeanFactory对象，如果没有就创建BeanFactory的bean
 					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
 					if (bean instanceof FactoryBean) {
 						FactoryBean<?> factory = (FactoryBean<?>) bean;
@@ -948,6 +951,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					}
 				}
 				else {
+					//非BeanFactory的Bean
 					//获取Bean对象
 					getBean(beanName);
 				}
