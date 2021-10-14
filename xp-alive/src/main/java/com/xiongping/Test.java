@@ -10,6 +10,7 @@ public class Test {
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				AppConfig.class);
+		context.registerShutdownHook();
 //		context.register(AppConfig.class);
 //		context.refresh();
 //		OrderService orderService = context.getBean("orderService", OrderService.class);
@@ -17,5 +18,6 @@ public class Test {
 //		UserService userService = context.getBean("userService", UserService.class);
 		XiongpingFactoryBean xiongpingFactoryBean = context.getBean("&xiongpingFactoryBean", XiongpingFactoryBean.class);
 		System.out.println(xiongpingFactoryBean);
+
 	}
 }
