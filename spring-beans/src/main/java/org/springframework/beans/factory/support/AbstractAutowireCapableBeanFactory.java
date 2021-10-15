@@ -514,6 +514,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// which cannot be stored in the shared merged bean definition.
 		// 返回了类对象，确保BeanDefinition中定义的类已经被加载
 		Class<?> resolvedClass = resolveBeanClass(mbd, beanName);
+		// 如果resolveBeanClass处理类的时候没有将class存储到mbd中，那么才会进入下面的逻辑
+		// 可能存在加载了类，却没有将类缓存到mbd中，那么就需要重新new一个BeanDefinition,并将解析出来的class对象缓存
 		if (resolvedClass != null && !mbd.hasBeanClass() && mbd.getBeanClassName() != null) {
 			mbdToUse = new RootBeanDefinition(mbd);
 			//将BeanClass属性设置为class对象
@@ -534,6 +536,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			// 实例化前-- 如果初始话前没有返回对象
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
 			if (bean != null) {
+				//一般是由InstantiationAwareBeanPostProcessor（实例化前）后置处理器生成的bean
+				//并且会经过初始化前的后置处理器处理
 				return bean;
 			}
 		}
@@ -584,7 +588,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
 		if (instanceWrapper == null) {
-			// 创建 Bean
+			// 创建 Bean,实例化bean
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 		Object bean = instanceWrapper.getWrappedInstance();
@@ -597,7 +601,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		synchronized (mbd.postProcessingLock) {
 			if (!mbd.postProcessed) {
 				try {
-					//处理BeanDefinition的PostProcessors,（扩展点）
+					//处理BeanDefinition的PostProcessors
 					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
 				}
 				catch (Throwable ex) {
@@ -610,15 +614,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		// Eagerly cache singletons to be able to resolve circular references
 		// even when triggered by lifecycle interfaces like BeanFactoryAware.
+		// 若这个bean是单例bean，且允许循环依赖，并且这个单例bean在创建中，那么就将这个bean存储到单例工厂中
 		boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
 				isSingletonCurrentlyInCreation(beanName));
-		// 若是正在创建的Bean
 		if (earlySingletonExposure) {
 			if (logger.isTraceEnabled()) {
 				logger.trace("Eagerly caching bean '" + beanName +
 						"' to allow for resolving potential circular references");
 			}
-			// 将创建Bean的逻辑存入单例工厂缓存
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
 
@@ -1145,7 +1148,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
 				Class<?> targetType = determineTargetType(beanName, mbd);
 				if (targetType != null) {
-					//BeanPostProcess 实例化之前,如果这里返回了bean的实例化对象，则需要处理初始化后的后置处理器
+					//BeanPostProcess 实例化之前的BeanProcessors(扩展点)
 					bean = applyBeanPostProcessorsBeforeInstantiation(targetType, beanName);
 					if (bean != null) {
 						//BeanPostProcess 初始化之后
@@ -1445,7 +1448,6 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			if (pvs == null) {
 				pvs = mbd.getPropertyValues();
 			}
-
 			for (InstantiationAwareBeanPostProcessor bp : getBeanPostProcessorCache().instantiationAware) {
 				//postProcessor，后置属性的处理
 				PropertyValues pvsToUse = bp.postProcessProperties(pvs, bw.getWrappedInstance(), beanName);
