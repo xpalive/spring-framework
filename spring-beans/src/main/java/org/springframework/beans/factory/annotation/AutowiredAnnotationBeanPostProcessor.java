@@ -666,6 +666,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			}
 		}
 
+		// 解析字段的值
 		@Nullable
 		private Object resolveFieldValue(Field field, Object bean, @Nullable String beanName) {
 			//需要注入的属性包装后的对象 DependencyDescriptor
