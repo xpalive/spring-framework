@@ -375,6 +375,7 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 	 */
 	@Nullable
 	public String getDependencyName() {
+		// 字段名称或方法参数名称
 		return (this.field != null ? this.field.getName() : obtainMethodParameter().getParameterName());
 	}
 

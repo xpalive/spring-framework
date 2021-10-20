@@ -16,6 +16,7 @@ public class Test {
 //		context.refresh();
 		OrderService orderService = context.getBean("orderService", OrderService.class);
 		System.out.println(orderService.getUserService());
+		System.out.println(orderService.getUserService1());
 		UserServiceFacade userService = context.getBean("userService", UserServiceFacade.class);
 		UserServiceFacade userService1 = context.getBean("userService1", UserServiceFacade.class);
 		UserServiceFacade userService2 = context.getBean("userService2", UserServiceFacade.class);
