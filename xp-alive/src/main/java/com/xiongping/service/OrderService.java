@@ -11,10 +11,11 @@ import javax.annotation.PreDestroy;
 public class OrderService {
 
 
+	@Autowired
 	private UserServiceFacade userService1;
+	@Autowired
 	private UserServiceFacade userService;
 
-	@Autowired
 	public void setUserService(UserServiceFacade userService1,UserServiceFacade userService) {
 		this.userService1 = userService1;
 		this.userService = userService;
