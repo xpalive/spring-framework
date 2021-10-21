@@ -1,11 +1,10 @@
 package com.xiongping.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
+import com.xiongping.service.lottory.Lottery;
+import com.xiongping.service.lottory.anno.TimeLottery;
 import javax.annotation.PreDestroy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class OrderService {
@@ -13,11 +12,34 @@ public class OrderService {
 
 	private UserServiceFacade userService1;
 	private UserServiceFacade userService;
+	private Lottery lottery;
+
+	public UserServiceFacade getUserService1() {
+		return userService1;
+	}
 
 	@Autowired
-	public void setUserService(UserServiceFacade userService1,UserServiceFacade userService) {
+	public void setUserService1(UserServiceFacade userService1) {
 		this.userService1 = userService1;
+	}
+
+	public UserServiceFacade getUserService() {
+		return userService;
+	}
+
+	@Autowired
+	public void setUserService(UserServiceFacade userService) {
 		this.userService = userService;
+	}
+
+	public Lottery getLottery() {
+		return lottery;
+	}
+
+	@Autowired
+	public void setLottery(
+			@TimeLottery Lottery lottery) {
+		this.lottery = lottery;
 	}
 
 	@PreDestroy
@@ -25,10 +47,4 @@ public class OrderService {
 		System.out.println("preDestroy");
 	}
 
-	public UserServiceFacade getUserService1() {
-		return userService1;
-	}
-	public UserServiceFacade getUserService() {
-		return userService;
-	}
 }
