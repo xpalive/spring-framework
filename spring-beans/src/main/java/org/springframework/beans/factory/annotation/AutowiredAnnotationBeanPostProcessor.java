@@ -150,6 +150,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	private final Map<Class<?>, Constructor<?>[]> candidateConstructorsCache = new ConcurrentHashMap<>(256);
 
+	// 根据BeanName缓存注入点的信息
 	private final Map<String, InjectionMetadata> injectionMetadataCache = new ConcurrentHashMap<>(256);
 
 
@@ -689,11 +690,13 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 					if (value != null || this.required) {
 						cachedFieldValue = desc;
 						registerDependentBeans(beanName, autowiredBeanNames);
-						// 如果是一个Bean就直接注入
+						// 如果是一个Bean就获取该BeanName
 						if (autowiredBeanNames.size() == 1) {
 							String autowiredBeanName = autowiredBeanNames.iterator().next();
+							// 判断这个BeanName在Bean工厂中存在，且和字段的类型一致
 							if (beanFactory.containsBean(autowiredBeanName) &&
 									beanFactory.isTypeMatch(autowiredBeanName, field.getType())) {
+								// 生成ShortcutDependencyDescriptior
 								cachedFieldValue = new ShortcutDependencyDescriptor(
 										desc, autowiredBeanName, field.getType());
 							}

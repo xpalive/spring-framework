@@ -108,9 +108,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	private final Map<String, Set<String>> containedBeanMap = new ConcurrentHashMap<>(16);
 
 	/** Map between dependent bean names: bean name to Set of dependent bean names. */
+	// dependentBeanMap key（当前BeanName）被BeanName依赖（LinkedHashSet）
 	private final Map<String, Set<String>> dependentBeanMap = new ConcurrentHashMap<>(64);
 
 	/** Map between depending bean names: bean name to Set of bean names for the bean's dependencies. */
+	// dependenciesForBeanMap key（当前BeanName）依赖哪些BeanName（LinkedHashSet）
 	private final Map<String, Set<String>> dependenciesForBeanMap = new ConcurrentHashMap<>(64);
 
 
@@ -227,7 +229,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 				if (logger.isDebugEnabled()) {
 					logger.debug("Creating shared instance of singleton bean '" + beanName + "'");
 				}
-				//创建前先检测
+				//创建前先检测,并标记创建中(存入创建中的map)
+				//检测set集合inCreationCheckExclusions中是否存在
+				//添加到正在创建中的缓存中 set集合singletonsCurrentlyInCreation
 				beforeSingletonCreation(beanName);
 				boolean newSingleton = false;
 				boolean recordSuppressedExceptions = (this.suppressedExceptions == null);
@@ -261,10 +265,12 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 						this.suppressedExceptions = null;
 					}
 					//创建完毕检测
+					//检测inCreationCheckExclusions中是否存在
+					//从正在创建中的缓存中移除 singletonsCurrentlyInCreation
 					afterSingletonCreation(beanName);
 				}
 				if (newSingleton) {
-					//将创建的单例加入到单例池中singletonObjects
+					//将创建的单例加入到单例池中（Map<String,Object>）singletonObjects
 					addSingleton(beanName, singletonObject);
 				}
 			}
@@ -419,8 +425,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @param dependentBeanName the name of the dependent bean
 	 */
 	public void registerDependentBean(String beanName, String dependentBeanName) {
+		// 处理别名，找到真实的bean
 		String canonicalName = canonicalName(beanName);
-
+		// beanName 被依赖的Bean（理解为类的属性）
+		// dependentBeanName 依赖的Bean（理解为当前类）
+		// dependentBeanMap key（当前BeanName）被BeanName依赖（LinkedHashSet）
 		synchronized (this.dependentBeanMap) {
 			Set<String> dependentBeans =
 					this.dependentBeanMap.computeIfAbsent(canonicalName, k -> new LinkedHashSet<>(8));
@@ -428,7 +437,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 				return;
 			}
 		}
-
+		// dependenciesForBeanMap key（当前BeanName）依赖哪些BeanName（LinkedHashSet）
 		synchronized (this.dependenciesForBeanMap) {
 			Set<String> dependenciesForBean =
 					this.dependenciesForBeanMap.computeIfAbsent(dependentBeanName, k -> new LinkedHashSet<>(8));
