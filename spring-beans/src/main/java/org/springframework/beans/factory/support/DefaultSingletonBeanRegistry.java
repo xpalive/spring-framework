@@ -230,8 +230,8 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					logger.debug("Creating shared instance of singleton bean '" + beanName + "'");
 				}
 				//创建前先检测,并标记创建中(存入创建中的map)
-				//检测inCreationCheckExclusions中是否存在
-				//添加到正在创建中的缓存中 singletonsCurrentlyInCreation
+				//检测set集合inCreationCheckExclusions中是否存在
+				//添加到正在创建中的缓存中 set集合singletonsCurrentlyInCreation
 				beforeSingletonCreation(beanName);
 				boolean newSingleton = false;
 				boolean recordSuppressedExceptions = (this.suppressedExceptions == null);
@@ -270,7 +270,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					afterSingletonCreation(beanName);
 				}
 				if (newSingleton) {
-					//将创建的单例加入到单例池中singletonObjects
+					//将创建的单例加入到单例池中（Map<String,Object>）singletonObjects
 					addSingleton(beanName, singletonObject);
 				}
 			}

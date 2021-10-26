@@ -304,6 +304,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 			if (!typeCheckOnly) {
 				//标记Bean已经被创建
+				//添加到 set集合alreadyCreated中
 				markBeanAsCreated(beanName);
 			}
 
@@ -1282,7 +1283,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @return the transformed bean name
 	 */
 	protected String transformedBeanName(String name) {
-		//别名的处理 canonicalName
+		// 别名的处理 canonicalName
+		// BeanFactoryUtils.transformedBeanName factoryBean的名字处理
 		return canonicalName(BeanFactoryUtils.transformedBeanName(name));
 	}
 
