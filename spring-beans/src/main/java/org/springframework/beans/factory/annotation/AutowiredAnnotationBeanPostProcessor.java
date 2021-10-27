@@ -264,6 +264,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 		// Let's check for lookup methods here...
 		if (!this.lookupMethodsChecked.contains(beanName)) {
+			// 查询lookup注解
 			if (AnnotationUtils.isCandidateClass(beanClass, Lookup.class)) {
 				try {
 					Class<?> targetClass = beanClass;
@@ -313,8 +314,11 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 								"] from ClassLoader [" + beanClass.getClassLoader() + "] failed", ex);
 					}
 					List<Constructor<?>> candidates = new ArrayList<>(rawCandidates.length);
+					// 记录require为True的构造方法
 					Constructor<?> requiredConstructor = null;
+					// 记录默认的构造方法
 					Constructor<?> defaultConstructor = null;
+					// kotlin的构造方法
 					Constructor<?> primaryConstructor = BeanUtils.findPrimaryConstructor(beanClass);
 					int nonSyntheticConstructors = 0;
 					for (Constructor<?> candidate : rawCandidates) {
@@ -324,7 +328,9 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 						else if (primaryConstructor != null) {
 							continue;
 						}
+						// 查询构造方法上的注解
 						MergedAnnotation<?> ann = findAutowiredAnnotation(candidate);
+						// 如果没有@Autowired注解
 						if (ann == null) {
 							Class<?> userClass = ClassUtils.getUserClass(beanClass);
 							if (userClass != beanClass) {
@@ -338,7 +344,15 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 								}
 							}
 						}
+						// 如果有@Autowired注解
 						if (ann != null) {
+							// 如果第一次扫描到@AutoWired(required = true)
+							// requiredConstructor 就不等于null
+							// 第二次扫描到带有@Autowired 的构造方法就会报错
+
+							// 如果第一次扫描到@AutoWired(required = false)
+							// requiredConstructor 还是为空
+							// 第二次如果扫描到@Autowired(required = true) 那么就会报错
 							if (requiredConstructor != null) {
 								throw new BeanCreationException(beanName,
 										"Invalid autowire-marked constructor: " + candidate +
@@ -347,6 +361,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 							}
 							boolean required = determineRequiredStatus(ann);
 							if (required) {
+								// 如果候选的构造方法不为空，那么就抛错
 								if (!candidates.isEmpty()) {
 									throw new BeanCreationException(beanName,
 											"Invalid autowire-marked constructors: " + candidates +
@@ -357,7 +372,9 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 							}
 							candidates.add(candidate);
 						}
+						// 如果参数数量为0个
 						else if (candidate.getParameterCount() == 0) {
+							// 记录默认的构造方法
 							defaultConstructor = candidate;
 						}
 					}
