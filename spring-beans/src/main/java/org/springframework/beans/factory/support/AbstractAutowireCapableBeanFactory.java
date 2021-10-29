@@ -588,7 +588,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
 		if (instanceWrapper == null) {
-			// 创建 Bean,实例化bean,在实例化bean的时候推断选择构造方法
+			// 实例化bean,在实例化bean的时候推断选择构造方法
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 		Object bean = instanceWrapper.getWrappedInstance();
@@ -1242,10 +1242,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// Candidate constructors for autowiring?
-		// 使用构造方法自动注入？
+		// 筛选出符合条件的构造方法
 		Constructor<?>[] ctors = determineConstructorsFromBeanPostProcessors(beanClass, beanName);
 		if (ctors != null || mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR ||
 				mbd.hasConstructorArgumentValues() || !ObjectUtils.isEmpty(args)) {
+			// 使用构造方法自动注入
 			return autowireConstructor(beanName, mbd, ctors, args);
 		}
 
@@ -1819,7 +1820,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}, getAccessControlContext());
 		}
 		else {
-			//添加回调
+			//添加Aware回调
 			invokeAwareMethods(beanName, bean);
 		}
 

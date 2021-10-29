@@ -269,6 +269,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 				try {
 					Class<?> targetClass = beanClass;
 					do {
+						// 循环类中的方法上释放有Lookup注解
 						ReflectionUtils.doWithLocalMethods(targetClass, method -> {
 							Lookup lookup = method.getAnnotation(Lookup.class);
 							if (lookup != null) {
@@ -306,6 +307,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 				if (candidateConstructors == null) {
 					Constructor<?>[] rawCandidates;
 					try {
+						// 找到所有的构造方法
 						rawCandidates = beanClass.getDeclaredConstructors();
 					}
 					catch (Throwable ex) {
@@ -321,6 +323,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 					// kotlin的构造方法
 					Constructor<?> primaryConstructor = BeanUtils.findPrimaryConstructor(beanClass);
 					int nonSyntheticConstructors = 0;
+					// 遍历所有的构造方法
 					for (Constructor<?> candidate : rawCandidates) {
 						if (!candidate.isSynthetic()) {
 							nonSyntheticConstructors++;
@@ -332,11 +335,13 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 						MergedAnnotation<?> ann = findAutowiredAnnotation(candidate);
 						// 如果没有@Autowired注解
 						if (ann == null) {
+							// 如果是CGLIB代理类就获取父类否则还是原来的类
 							Class<?> userClass = ClassUtils.getUserClass(beanClass);
 							if (userClass != beanClass) {
 								try {
 									Constructor<?> superCtor =
 											userClass.getDeclaredConstructor(candidate.getParameterTypes());
+									// 查询父类是否有@Autowired注解
 									ann = findAutowiredAnnotation(superCtor);
 								}
 								catch (NoSuchMethodException ex) {
@@ -378,10 +383,13 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 							defaultConstructor = candidate;
 						}
 					}
+					// 如果有多个构造方法
 					if (!candidates.isEmpty()) {
 						// Add default constructor to list of optional constructors, as fallback.
+						// requiredConstructor 如果是null说明没有@Autowired标注为true的构造方法
 						if (requiredConstructor == null) {
 							if (defaultConstructor != null) {
+								// 将无参构造方法添加到候选List中
 								candidates.add(defaultConstructor);
 							}
 							else if (candidates.size() == 1 && logger.isInfoEnabled()) {
