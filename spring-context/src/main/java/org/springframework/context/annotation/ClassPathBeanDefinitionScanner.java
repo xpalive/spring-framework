@@ -285,6 +285,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 				//生成beanName -> AnnotationBeanNameGenerator
 				String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
 				if (candidate instanceof AbstractBeanDefinition) {
+					// 用扫描器的默认BeanDefinition填充扫描的BeanDefinition
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
 				}
 				if (candidate instanceof AnnotatedBeanDefinition) {

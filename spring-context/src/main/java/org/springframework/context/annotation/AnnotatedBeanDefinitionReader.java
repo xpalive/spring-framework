@@ -256,7 +256,7 @@ public class AnnotatedBeanDefinitionReader {
 		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {
 			return;
 		}
-		// 实例化接口方法，提供实例化方法
+		// 实例化方法
 		abd.setInstanceSupplier(supplier);
 
 		// 处理scope

@@ -4,6 +4,7 @@ import com.xiongping.service.OrderService;
 import com.xiongping.service.UserService;
 import com.xiongping.service.UserServiceFacade;
 import com.xiongping.service.XiongpingFactoryBean;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Test {
@@ -12,6 +13,9 @@ public class Test {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				AppConfig.class);
 		context.registerShutdownHook();
+
+//		BeanDefinition beanDefinition =
+
 //		context.register(AppConfig.class);
 //		context.refresh();
 		OrderService orderService = context.getBean("orderService", OrderService.class);
