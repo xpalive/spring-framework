@@ -122,7 +122,7 @@ final class PostProcessorRegistrationDelegate {
 			sortPostProcessors(currentRegistryProcessors, beanFactory);
 			registryProcessors.addAll(currentRegistryProcessors);
 			// 请求执行BeanDefinitionRegistryPostProcessor 后置处理器
-			// 这里会处理配置类
+			// 这里会处理配置类 读取BeanDefinition
 			// ConfigurationClassPostProcessor是一个继承了PriorityOrdered 的后置处理器，所以这里会第一步就开始处理配置类
 			invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry, beanFactory.getApplicationStartup());
 			currentRegistryProcessors.clear();

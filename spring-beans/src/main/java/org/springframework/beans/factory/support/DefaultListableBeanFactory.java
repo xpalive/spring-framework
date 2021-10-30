@@ -1314,12 +1314,15 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			return new Jsr330Factory().createDependencyProvider(descriptor, requestingBeanName);
 		}
 		else {
-			// 是否懒加载
+			// 是否懒加载,如果是懒加载则创建代理对象，否则返回null
+			// ContextAnnotationAutowireCandidateResolver#getLazyResolutionProxyIfNecessary
+			// 这里的@Lazy是处理field上的Lazy注解
 			Object result = getAutowireCandidateResolver().getLazyResolutionProxyIfNecessary(
 					descriptor, requestingBeanName);
 			if (result == null) {
 				result = doResolveDependency(descriptor, requestingBeanName, autowiredBeanNames, typeConverter);
 			}
+			// 如果是懒加载这里返回的就是代理对象，否则就是Bean
 			return result;
 		}
 	}

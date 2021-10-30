@@ -4,6 +4,7 @@ import com.xiongping.service.lottory.Lottery;
 import com.xiongping.service.lottory.anno.TimeLottery;
 import javax.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,6 +14,11 @@ public class OrderService {
 	private UserServiceFacade userService1;
 	private UserServiceFacade userService;
 	private Lottery lottery;
+
+	@Bean
+	public UserServiceFacade userServiceFacadeAtBean(){
+		return new UserService();
+	}
 
 	public UserServiceFacade getUserService1() {
 		return userService1;
