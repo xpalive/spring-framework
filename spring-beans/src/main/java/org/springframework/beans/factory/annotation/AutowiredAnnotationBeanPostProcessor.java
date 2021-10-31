@@ -269,7 +269,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 				try {
 					Class<?> targetClass = beanClass;
 					do {
-						// 循环类中的方法上释放有Lookup注解
+						// 循环类中的方法上有Lookup注解
 						ReflectionUtils.doWithLocalMethods(targetClass, method -> {
 							Lookup lookup = method.getAnnotation(Lookup.class);
 							if (lookup != null) {
@@ -278,6 +278,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 								try {
 									RootBeanDefinition mbd = (RootBeanDefinition)
 											this.beanFactory.getMergedBeanDefinition(beanName);
+									// 将lookup注解的方法放到BeanDefinition中
 									mbd.getMethodOverrides().addOverride(override);
 								}
 								catch (NoSuchBeanDefinitionException ex) {
