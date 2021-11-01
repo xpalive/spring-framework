@@ -164,6 +164,7 @@ public abstract class AnnotationConfigUtils {
 
 		// 配置类的beanDefinition
 		if (!registry.containsBeanDefinition(CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME)) {
+			// 这里就是一个BeanFactoryPostProcessor bean工厂后置处理器，可以在BeanFactory中注册添加BeanDefinition等
 			RootBeanDefinition def = new RootBeanDefinition(ConfigurationClassPostProcessor.class);
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME));

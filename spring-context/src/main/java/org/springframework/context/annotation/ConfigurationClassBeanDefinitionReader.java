@@ -206,9 +206,11 @@ class ConfigurationClassBeanDefinitionReader {
 
 		// Consider name and any aliases
 		List<String> names = new ArrayList<>(Arrays.asList(bean.getStringArray("name")));
+		// 如果设置了多个名字 那么就取第一个名字作为BeanName
 		String beanName = (!names.isEmpty() ? names.remove(0) : methodName);
 
 		// Register aliases even when overridden
+		// 其他的名字就作为别名
 		for (String alias : names) {
 			this.registry.registerAlias(beanName, alias);
 		}
