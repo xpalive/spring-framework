@@ -577,6 +577,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// 将后置处理器注册到容器中
 				// 在这里扫描了类,并生成了beanDefinition
 				// 此处会对beanPostProcessor进行一次分类(每次新注册postProcessor就会重新缓存分类一次)
+				// BeanFactoryPostProcessor 和 BeanDefinitionRegistryPostProcessor 进行请求处理
+				// 其中 ConfigurationClassPostProcessor 负责处理配置类
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.

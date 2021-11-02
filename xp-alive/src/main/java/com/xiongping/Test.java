@@ -11,7 +11,6 @@ public class Test {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				AppConfig.class);
 		context.registerShutdownHook();
-
 		BeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(
 				UserService2.class)
 				.getBeanDefinition();
