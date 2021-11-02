@@ -15,6 +15,7 @@ public class Test {
 				UserService2.class)
 				.getBeanDefinition();
 
+		context.publishEvent("123");
 //		context.register(AppConfig.class);
 //		context.refresh();
 //		OrderService orderService = context.getBean("orderService", OrderService.class);
