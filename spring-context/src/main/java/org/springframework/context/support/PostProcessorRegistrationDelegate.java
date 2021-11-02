@@ -59,6 +59,9 @@ final class PostProcessorRegistrationDelegate {
 	public static void invokeBeanFactoryPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
+		// 先执行的 BeanDefinitionRegistryPostProcessor#postProcessBeanDefinitionRegistry 方法
+		// 再执行的 BeanFactoryPostProcessor#postProcessBeanFactory 方法
+
 		// WARNING: Although it may appear that the body of this method can be easily
 		// refactored to avoid the use of multiple loops and multiple lists, the use
 		// of multiple lists and multiple passes over the names of processors is
@@ -88,7 +91,7 @@ final class PostProcessorRegistrationDelegate {
 			// 区分传入的BeanFactoryPostProcessors中的Bean的具体类型
 			// 是常规的BeanFactoryPostProcessor
 			// 还是BeanFactoryRegistryPostProcessor
-			// 这里是空的
+			// 这里是空的 这里的beanFactoryPostProcessors 是通过context.addBeanFactoryPostProcessor(xxx)添加的
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {
 					BeanDefinitionRegistryPostProcessor registryProcessor =
