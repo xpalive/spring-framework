@@ -284,7 +284,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 					logger.debug("Bean definition has already been processed as a configuration class: " + beanDef);
 				}
 			}
-			// 判断带有以下注解的类
+			// 判断带有以下注解的类,是否是配置类ConfigurationClassUtils.checkConfigurationClassCandidate
 			// @Configuration
 			// @Component
 			// @ComponentScan
@@ -352,7 +352,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
 			// 加载@Bean注释的方法
-			// configClasses 上面parser.parse处理后缓存的configClasses
+			// configClasses = parser.getConfigurationClasses()
 			this.reader.loadBeanDefinitions(configClasses);
 			alreadyParsed.addAll(configClasses);
 			processConfig.tag("classCount", () -> String.valueOf(configClasses.size())).end();
