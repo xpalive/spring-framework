@@ -1,9 +1,12 @@
 package com.xiongping;
 
+import com.xiongping.service.UserService;
 import com.xiongping.service.UserService2;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Import;
+
 
 public class Test {
 

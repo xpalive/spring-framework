@@ -147,6 +147,8 @@ class ConfigurationClassBeanDefinitionReader {
 			return;
 		}
 
+
+		// @Import处理
 		if (configClass.isImported()) {
 			registerBeanDefinitionForImportedConfigurationClass(configClass);
 		}
