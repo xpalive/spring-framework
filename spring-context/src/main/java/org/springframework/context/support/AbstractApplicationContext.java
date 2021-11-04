@@ -570,6 +570,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// 没有做任何事，这里是个空方法,由子类执行，beanFactory = {DefaultListableBeanFactory@1144}
 				// AnnotationConfigApplicationContext没有实现该方法
 				// 所以这里执行的是AbstractApplicationContext的默认方法
+				// 可以在BeanFactory中注册一些其他的后置处理器：如在GenericWebApplicationContext中就注册了一些关于web的postProcess
 				postProcessBeanFactory(beanFactory);
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
