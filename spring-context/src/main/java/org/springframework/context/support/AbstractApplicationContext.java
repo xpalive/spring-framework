@@ -579,10 +579,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// 此处会对beanPostProcessor进行一次分类(每次新注册postProcessor就会重新缓存分类一次)
 				// BeanFactoryPostProcessor 和 BeanDefinitionRegistryPostProcessor 进行请求处理
 				// 其中 ConfigurationClassPostProcessor 负责处理配置类
+				// 对BeanFactoryPostProcessor的处理
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
 				// 注册BeanPostProcessors,此处会对beanPostProcessor进行一次分类(每次新注册postProcessor就会重新缓存分类一次)
+				// 对BeanProstProcessor的处理
 				registerBeanPostProcessors(beanFactory);
 				beanPostProcess.end();
 
