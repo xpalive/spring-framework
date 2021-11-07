@@ -295,6 +295,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			// @Import
 			// @ImportResource
 			else if (ConfigurationClassUtils.checkConfigurationClassCandidate(beanDef, this.metadataReaderFactory)) {
+				// 添加配置类到缓存
 				configCandidates.add(new BeanDefinitionHolder(beanDef, beanName));
 			}
 		}
@@ -344,6 +345,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			//解析配置类 parser中持有registry 注册BeanDefinition
 			// 读取配置路径下的BeanDefinition
 			// 并缓存处理过的ConfigurationClass，有类信息生成
+			// 完成配置类的处理后会继续扫描beanDefinition，并将beanDefinition存储到BeanFactory中
 			parser.parse(candidates);
 			parser.validate();
 
@@ -363,6 +365,8 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			processConfig.tag("classCount", () -> String.valueOf(configClasses.size())).end();
 
 			candidates.clear();
+			// candidateNames.length 第一次原始的BeanDefinition的数量
+			// this.reader.loadBeanDefinitions(configClasses)处理后registry.getBeanDefinitionCount() 处理过配置类后的BeanDefinition的数量
 			if (registry.getBeanDefinitionCount() > candidateNames.length) {
 				String[] newCandidateNames = registry.getBeanDefinitionNames();
 				Set<String> oldCandidateNames = new HashSet<>(Arrays.asList(candidateNames));

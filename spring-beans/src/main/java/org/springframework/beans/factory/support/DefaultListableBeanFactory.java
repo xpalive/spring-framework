@@ -1033,6 +1033,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 							"] with [" + beanDefinition + "]");
 				}
 			}
+			// 存储BeanDefinition
 			this.beanDefinitionMap.put(beanName, beanDefinition);
 		}
 		else {

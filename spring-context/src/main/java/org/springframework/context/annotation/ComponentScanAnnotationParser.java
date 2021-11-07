@@ -132,7 +132,7 @@ class ComponentScanAnnotationParser {
 				return declaringClass.equals(className);
 			}
 		});
-		// 开始扫描
+		// 开始扫描，扫描出来的BeanDefinition也会存储到DefaultListableBeanFactory中
 		return scanner.doScan(StringUtils.toStringArray(basePackages));
 	}
 

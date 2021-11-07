@@ -157,7 +157,9 @@ class ConfigurationClassBeanDefinitionReader {
 			loadBeanDefinitionsForBeanMethod(beanMethod);
 		}
 
+		// 处理@ImportResource("spring.xml")
 		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
+		// 处理@ImportBeanDefinitionRegistror 调用 registrar.registerBeanDefinitions
 		// 请求 ImportBeanDefinitionRegistrars.registerBeanDefinitions
 		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
 	}
@@ -228,6 +230,7 @@ class ConfigurationClassBeanDefinitionReader {
 			return;
 		}
 
+		// 创建BeanDefinition
 		ConfigurationClassBeanDefinition beanDef = new ConfigurationClassBeanDefinition(configClass, metadata, beanName);
 		beanDef.setSource(this.sourceExtractor.extractSource(metadata, configClass.getResource()));
 
@@ -300,6 +303,7 @@ class ConfigurationClassBeanDefinitionReader {
 			logger.trace(String.format("Registering bean definition for @Bean method %s.%s()",
 					configClass.getMetadata().getClassName(), beanName));
 		}
+		// 将BeanDefinition 注册
 		this.registry.registerBeanDefinition(beanName, beanDefToRegister);
 	}
 
@@ -378,7 +382,7 @@ class ConfigurationClassBeanDefinitionReader {
 			BeanDefinitionReader reader = readerInstanceCache.get(readerClass);
 			if (reader == null) {
 				try {
-					// Instantiate the specified BeanDefinitionReader
+					// Instantiate the specified BeanDefinitionReader 实例化一个reader
 					reader = readerClass.getConstructor(BeanDefinitionRegistry.class).newInstance(this.registry);
 					// Delegate the current ResourceLoader to it if possible
 					if (reader instanceof AbstractBeanDefinitionReader) {
