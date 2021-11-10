@@ -685,6 +685,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 				}
 			}
 			else {
+				// 解析字段的值
 				value = resolveFieldValue(field, bean, beanName);
 			}
 			if (value != null) {

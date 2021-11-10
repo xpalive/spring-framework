@@ -1316,6 +1316,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 		else {
 			// 是否懒加载,如果是懒加载则创建代理对象，否则返回null
+			// AnnotationConfigUtils.registerAnnotationConfigProcessors(BeanDefinitionRegistry, Object) 设置了ContextAnnotationAutowireCandidateResolver
 			// ContextAnnotationAutowireCandidateResolver#getLazyResolutionProxyIfNecessary
 			// 这里的@Lazy是处理field上的Lazy注解
 			Object result = getAutowireCandidateResolver().getLazyResolutionProxyIfNecessary(

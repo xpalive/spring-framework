@@ -123,12 +123,15 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 			}
 		};
 
+		// 通过ProxyFactory创建代理类
 		ProxyFactory pf = new ProxyFactory();
 		pf.setTargetSource(ts);
 		Class<?> dependencyType = descriptor.getDependencyType();
+		// 如果是接口
 		if (dependencyType.isInterface()) {
 			pf.addInterface(dependencyType);
 		}
+		// 设置classLoader
 		return pf.getProxy(dlbf.getBeanClassLoader());
 	}
 
