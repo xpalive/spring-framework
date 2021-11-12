@@ -4,7 +4,7 @@ import javax.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class OrderService1 {
 
 	@Autowired
@@ -12,7 +12,7 @@ public class OrderService1 {
 
 	@PreDestroy
 	public void des() {
-		System.out.println("preDestroy");
+		System.out.println("OrderService1 preDestroy");
 	}
 
 }

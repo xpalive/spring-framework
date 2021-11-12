@@ -36,5 +36,8 @@ public class Test {
 		Object userServiceBean = context.getBean("userServiceBean");
 		System.out.println(userServiceBean);
 
+		Object prototypeBean = context.getBean("prototypeBean");
+		System.out.println(prototypeBean);
+
 	}
 }

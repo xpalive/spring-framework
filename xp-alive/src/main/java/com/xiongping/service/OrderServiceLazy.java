@@ -15,7 +15,7 @@ public class OrderServiceLazy {
 
 	@PreDestroy
 	public void des() {
-		System.out.println("preDestroy");
+		System.out.println("OrderServiceLazy preDestroy");
 	}
 
 }

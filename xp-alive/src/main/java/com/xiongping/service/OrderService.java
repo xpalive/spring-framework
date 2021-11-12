@@ -50,7 +50,7 @@ public class OrderService {
 
 	@PreDestroy
 	public void des() {
-		System.out.println("preDestroy");
+		System.out.println("OrderService preDestroy");
 	}
 
 }
