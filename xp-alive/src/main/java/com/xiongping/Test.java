@@ -6,6 +6,8 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.transaction.support.TransactionSynchronizationUtils;
 
 
 public class Test {
@@ -36,8 +38,10 @@ public class Test {
 		Object userServiceBean = context.getBean("userServiceBean");
 		System.out.println(userServiceBean);
 
-		Object prototypeBean = context.getBean("prototypeBean");
-		System.out.println(prototypeBean);
+		UserService2 userService2 = (UserService2) context.getBean("userService2");
+		userService2.test();
+
+
 
 	}
 }
