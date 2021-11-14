@@ -17,6 +17,6 @@ public class UserService2 implements UserServiceFacade {
 	public void test(){
 		jdbcTemplate.execute("insert into ums_user values (2,'xiongping',34)");
 		System.out.println("test");
-//		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();// 强制回滚
+		TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();// 强制回滚
 	}
 }
