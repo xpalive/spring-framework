@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionSynchronizationUtils;
 
+import java.util.ServiceLoader;
+
 
 public class Test {
 
@@ -40,7 +42,6 @@ public class Test {
 
 		UserService2 userService2 = (UserService2) context.getBean("userService2");
 		userService2.test();
-
 
 
 	}

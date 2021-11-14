@@ -167,6 +167,7 @@ public abstract class AnnotationUtils {
 		if (annotationName.startsWith("java.")) {
 			return true;
 		}
+		// clazz 是Java开头，或者是Order类
 		if (AnnotationsScanner.hasPlainJavaAnnotationsOnly(clazz)) {
 			return false;
 		}
