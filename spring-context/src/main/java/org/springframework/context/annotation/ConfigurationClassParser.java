@@ -312,6 +312,7 @@ class ConfigurationClassParser {
 					}
 					// 再次判断是否是配置类
 					if (ConfigurationClassUtils.checkConfigurationClassCandidate(bdCand, this.metadataReaderFactory)) {
+						// 这是是一个递归调用
 						parse(bdCand.getBeanClassName(), holder.getBeanName());
 					}
 				}
