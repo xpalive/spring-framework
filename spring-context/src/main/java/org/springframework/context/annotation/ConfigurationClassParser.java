@@ -247,6 +247,7 @@ class ConfigurationClassParser {
 		}
 
 		// Recursively process the configuration class and its superclass hierarchy.
+		// 将配置类处理为sourceClass，并设置 将配置类处理为sourceClass.source 为配置类的Class类
 		SourceClass sourceClass = asSourceClass(configClass, filter);
 		// 递归处理配置类的父类
 		do {
@@ -311,6 +312,7 @@ class ConfigurationClassParser {
 					}
 					// 再次判断是否是配置类
 					if (ConfigurationClassUtils.checkConfigurationClassCandidate(bdCand, this.metadataReaderFactory)) {
+						// 这是是一个递归调用
 						parse(bdCand.getBeanClassName(), holder.getBeanName());
 					}
 				}
@@ -322,6 +324,7 @@ class ConfigurationClassParser {
 		// ImportSelector
 		// ImportBeanDefinitionRegistrar
 		// 为实现任何接口的类
+		// @Import
 		processImports(configClass, sourceClass, getImports(sourceClass), filter, true);
 
 		// Process any @ImportResource annotations
@@ -556,6 +559,7 @@ class ConfigurationClassParser {
 			throws IOException {
 
 		if (visited.add(sourceClass)) {
+			// 寻找所有父类是否有带Import的方法
 			for (SourceClass annotation : sourceClass.getAnnotations()) {
 				String annName = annotation.getMetadata().getClassName();
 				if (!annName.equals(Import.class.getName())) {
