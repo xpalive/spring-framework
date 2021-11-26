@@ -1,11 +1,9 @@
 package com.xiongping;
 
-import com.xiongping.service.UserService;
 import com.xiongping.service.UserService2;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Import;
 
 
 public class Test {
@@ -15,7 +13,7 @@ public class Test {
 				AppConfig.class);
 		context.registerShutdownHook();
 		BeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(
-				UserService2.class)
+						UserService2.class)
 				.getBeanDefinition();
 
 		context.publishEvent("123");
