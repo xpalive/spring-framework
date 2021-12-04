@@ -17,9 +17,9 @@ public class Test {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				AppConfig.class);
 		context.registerShutdownHook();
-		BeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(
-						UserService2.class)
-				.getBeanDefinition();
+//		BeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(
+//						UserService2.class)
+//				.getBeanDefinition();
 
 		context.publishEvent("123");
 //		context.register(AppConfig.class);
@@ -36,11 +36,11 @@ public class Test {
 //		UserService userService = context.getBean("userService", UserService.class);
 //		XiongpingFactoryBean xiongpingFactoryBean = context.getBean("&xiongpingFactoryBean", XiongpingFactoryBean.class);
 //		System.out.println(xiongpingFactoryBean);
-		Object userServiceBean = context.getBean("userServiceBean");
-		System.out.println(userServiceBean);
-
-		UserService2 userService2 = (UserService2) context.getBean("userService2");
-		userService2.test();
+//		Object userServiceBean = context.getBean("userServiceBean");
+//		System.out.println(userServiceBean);
+//
+//		UserService2 userService2 = (UserService2) context.getBean("userService2");
+//		userService2.test();
 
 
 	}

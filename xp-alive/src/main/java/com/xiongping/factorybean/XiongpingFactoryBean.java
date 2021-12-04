@@ -1,4 +1,4 @@
-package com.xiongping.service;
+package com.xiongping.factorybean;
 
 import com.xiongping.model.Xiongping;
 import org.springframework.beans.factory.FactoryBean;
