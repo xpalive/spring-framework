@@ -15,30 +15,32 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 
-@ComponentScan(value = "com.xiongping.model")
-@Import(UserService.class)
-@EnableTransactionManagement // 开启事务
+@ComponentScan(value = "com.xiongping.factorybean")
+//@ComponentScan(value = "com.xiongping.model")
+//@ComponentScan(value = "com.xiongping")
+//@Import(UserService.class)
+//@EnableTransactionManagement // 开启事务
 @Configuration
 public class AppConfig {
 
-	@Bean
+//	@Bean
 	public JdbcTemplate jdbcTemplate(){
 		return new JdbcTemplate(dataSource());
 	}
 
-	@Bean
+//	@Bean
 	public TransactionManager transactionManager() {
 		DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
 		transactionManager.setDataSource(dataSource());
 		return transactionManager;
 	}
 
-	@Bean
+//	@Bean
 	public UserService userServiceBean(){
 		return new UserService();
 	}
 
-	@Bean
+//	@Bean
 	public DataSource dataSource(){
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setUrl("jdbc:mysql://192.168.10.81:3306/tuling?characterEncoding=utf-8&useSSL=false");
