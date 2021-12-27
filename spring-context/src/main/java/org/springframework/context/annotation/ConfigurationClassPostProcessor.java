@@ -319,6 +319,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		if (registry instanceof SingletonBeanRegistry) {
 			sbr = (SingletonBeanRegistry) registry;
 			if (!this.localBeanNameGeneratorSet) {
+				// 查看是否配置了beanName生成器
 				BeanNameGenerator generator = (BeanNameGenerator) sbr.getSingleton(
 						AnnotationConfigUtils.CONFIGURATION_BEAN_NAME_GENERATOR);
 				if (generator != null) {
@@ -350,6 +351,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			parser.validate();
 
 			Set<ConfigurationClass> configClasses = new LinkedHashSet<>(parser.getConfigurationClasses());
+			// 移除已解析过的configClasses
 			configClasses.removeAll(alreadyParsed);
 
 			// Read the model and create bean definitions based on its content
@@ -361,6 +363,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			// 加载@Bean注释的方法
 			// configClasses = parser.getConfigurationClasses()
 			this.reader.loadBeanDefinitions(configClasses);
+			// 保存已解析过的configClasses
 			alreadyParsed.addAll(configClasses);
 			processConfig.tag("classCount", () -> String.valueOf(configClasses.size())).end();
 

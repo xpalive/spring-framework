@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 
-@ComponentScan(value = "com.xiongping.factorybean")
+@ComponentScan(value = "com.xiongping.config")
 //@ComponentScan(value = "com.xiongping.model")
 //@ComponentScan(value = "com.xiongping")
 //@Import(UserService.class)
@@ -49,4 +49,6 @@ public class AppConfig {
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		return dataSource;
 	}
+
+
 }

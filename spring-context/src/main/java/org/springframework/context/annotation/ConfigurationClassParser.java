@@ -247,7 +247,7 @@ class ConfigurationClassParser {
 		}
 
 		// Recursively process the configuration class and its superclass hierarchy.
-		// 将配置类处理为sourceClass，并设置 将配置类处理为sourceClass.source 为配置类的Class类
+		// 将配置类处理为sourceClass，并设置 将配置类的类型设置到sourceClass.source
 		SourceClass sourceClass = asSourceClass(configClass, filter);
 		// 递归处理配置类的父类
 		do {
@@ -323,7 +323,7 @@ class ConfigurationClassParser {
 		// 这里会分三种类
 		// ImportSelector
 		// ImportBeanDefinitionRegistrar
-		// 为实现任何接口的类
+		// 未实现任何接口的类
 		// @Import
 		processImports(configClass, sourceClass, getImports(sourceClass), filter, true);
 
@@ -538,6 +538,7 @@ class ConfigurationClassParser {
 	private Set<SourceClass> getImports(SourceClass sourceClass) throws IOException {
 		Set<SourceClass> imports = new LinkedHashSet<>();
 		Set<SourceClass> visited = new LinkedHashSet<>();
+		//返回两个集合值，那么就传入两个集合
 		collectImports(sourceClass, imports, visited);
 		return imports;
 	}
@@ -673,6 +674,7 @@ class ConfigurationClassParser {
 	 */
 	SourceClass asSourceClass(@Nullable Class<?> classType, Predicate<String> filter) throws IOException {
 		if (classType == null || filter.test(classType.getName())) {
+			// 返回Object sourceClass
 			return this.objectSourceClass;
 		}
 		try {
