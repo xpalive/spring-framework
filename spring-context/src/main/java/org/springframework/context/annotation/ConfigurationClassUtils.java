@@ -128,7 +128,7 @@ abstract class ConfigurationClassUtils {
 		if (config != null && !Boolean.FALSE.equals(config.get("proxyBeanMethods"))) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
 		}
-		// 这里会判断config 和 类中是否有@Bean的方法
+		// 这里会判断config 和 类中是否有@Bean的方法或者类有其他注解：@Component、@ComponentScan、@Import、@ImportScan
 		// isConfigurationCandidate 判断是否是配置类
 		else if (config != null || isConfigurationCandidate(metadata)) {
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_LITE);
