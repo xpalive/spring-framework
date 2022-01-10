@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 //@ComponentScan(value = "com.xiongping.model")
 //@ComponentScan(value = "com.xiongping")
 //@Import(UserService.class)
-//@EnableTransactionManagement // 开启事务
+@EnableTransactionManagement // 开启事务
 @Configuration
 public class AppConfig {
 
