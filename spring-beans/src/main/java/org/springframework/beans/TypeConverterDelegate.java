@@ -120,10 +120,12 @@ class TypeConverterDelegate {
 
 		ConversionFailedException conversionAttemptEx = null;
 
+
 		// No custom editor but custom ConversionService specified?
 		ConversionService conversionService = this.propertyEditorRegistry.getConversionService();
 		if (editor == null && conversionService != null && newValue != null && typeDescriptor != null) {
 			TypeDescriptor sourceTypeDesc = TypeDescriptor.forObject(newValue);
+			// 查看SimpleTypeConvertor中默认的转化器中是否有适配的转化器
 			if (conversionService.canConvert(sourceTypeDesc, typeDescriptor)) {
 				try {
 					return (T) conversionService.convert(newValue, sourceTypeDesc, typeDescriptor);
