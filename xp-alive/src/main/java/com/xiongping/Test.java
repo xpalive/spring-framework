@@ -1,6 +1,7 @@
 package com.xiongping;
 
 import com.xiongping.service.UserService2;
+import java.util.Arrays;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -41,7 +42,8 @@ public class Test {
 //
 //		UserService2 userService2 = (UserService2) context.getBean("userService2");
 //		userService2.test();
-
+		String[] beanDefinitionNames = context.getBeanDefinitionNames();
+		Arrays.stream(beanDefinitionNames).forEach(System.out::println);
 
 	}
 }
