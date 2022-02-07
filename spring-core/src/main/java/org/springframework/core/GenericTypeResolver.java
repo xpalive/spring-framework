@@ -109,6 +109,7 @@ public final class GenericTypeResolver {
 	 */
 	@Nullable
 	public static Class<?> resolveTypeArgument(Class<?> clazz, Class<?> genericIfc) {
+		//获取指定类的接口的泛型
 		ResolvableType resolvableType = ResolvableType.forClass(clazz).as(genericIfc);
 		if (!resolvableType.hasGenerics()) {
 			return null;
