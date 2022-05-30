@@ -528,6 +528,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			// 方法注入点
 			ReflectionUtils.doWithLocalMethods(targetClass, method -> {
 				Method bridgedMethod = BridgeMethodResolver.findBridgedMethod(method);
+				// 桥架方法 接口中有泛型方法，实现类实现了该接口方法，那么就会有桥接方法
 				if (!BridgeMethodResolver.isVisibilityBridgeMethodPair(method, bridgedMethod)) {
 					return;
 				}
@@ -685,7 +686,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 				}
 			}
 			else {
-				// 解析字段的值
+				// 根据field从beanFactory中找匹配的bean对象
 				value = resolveFieldValue(field, bean, beanName);
 			}
 			if (value != null) {
