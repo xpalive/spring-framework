@@ -226,7 +226,9 @@ public class InitDestroyAnnotationBeanPostProcessor
 		Class<?> targetClass = clazz;
 
 		do {
+			// 初始化方法
 			final List<LifecycleElement> currInitMethods = new ArrayList<>();
+			// 销毁方法
 			final List<LifecycleElement> currDestroyMethods = new ArrayList<>();
 
 			ReflectionUtils.doWithLocalMethods(targetClass, method -> {
@@ -248,7 +250,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 			initMethods.addAll(0, currInitMethods);
 			destroyMethods.addAll(currDestroyMethods);
 			targetClass = targetClass.getSuperclass();
-		}
+		}// 循环父类
 		while (targetClass != null && targetClass != Object.class);
 
 		return (initMethods.isEmpty() && destroyMethods.isEmpty() ? this.emptyLifecycleMetadata :
