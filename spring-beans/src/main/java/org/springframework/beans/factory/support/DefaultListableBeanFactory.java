@@ -1421,6 +1421,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 			Object result = instanceCandidate;
 			if (result instanceof NullBean) {
+				// 判断 required 属性是否为true 如果为false 则返回空对象
 				if (isRequired(descriptor)) {
 					raiseNoMatchingBeanFound(type, descriptor.getResolvableType(), descriptor);
 				}
