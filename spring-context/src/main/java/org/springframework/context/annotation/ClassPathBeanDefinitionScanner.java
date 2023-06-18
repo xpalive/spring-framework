@@ -355,6 +355,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 		if (originatingDef != null) {
 			existingDef = originatingDef;
 		}
+		// 兼容，新扫描的BeanDefinition和存在的BeanDefinition是否兼容
 		if (isCompatible(beanDefinition, existingDef)) {
 			return false;
 		}
