@@ -266,8 +266,9 @@ public class AnnotatedBeanDefinitionReader {
 		// 生成Bean的名字
 		String beanName = (name != null ? name : this.beanNameGenerator.generateBeanName(abd, this.registry));
 
-		//处理注解 @Lazy、@Primary、@DependsOn、@Role、@Description
+		//处理注解BeanDefinition中读取到的注解 @Lazy、@Primary、@DependsOn、@Role、@Description
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(abd);
+		//以参数传入的注解为准
 		if (qualifiers != null) {
 			for (Class<? extends Annotation> qualifier : qualifiers) {
 				if (Primary.class == qualifier) {
