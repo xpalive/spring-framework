@@ -1,10 +1,10 @@
-package com.xiongping.config;
+package com.xiongping.secondConfig;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(value = "com.xiongping.secondConfig")
-public class OtherConfig {
+@ComponentScan(value = "com.xiongping.thirdConfig")
+public class SecondOtherConfig {
 
 }
