@@ -15,9 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 
-@ComponentScan(value = "com.xiongping.config")
+//@ComponentScan(value = "com.xiongping.config")
 //@ComponentScan(value = "com.xiongping.model")
 //@ComponentScan(value = "com.xiongping")
+@ComponentScan(value = "com.xiongping.utiltest")
 //@Import(UserService.class)
 @EnableTransactionManagement // 开启事务
 @Configuration
