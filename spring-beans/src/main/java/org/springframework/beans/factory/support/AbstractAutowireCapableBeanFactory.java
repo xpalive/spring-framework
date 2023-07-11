@@ -602,6 +602,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			if (!mbd.postProcessed) {
 				try {
 					//处理BeanDefinition的PostProcessors
+					//依赖注入的PostProcessor，
+					// AutowiredAnnotationBeanPostProcessor，CommonAnnotationBeanPostProcessor 初始化注入信息并缓存
 					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
 				}
 				catch (Throwable ex) {
