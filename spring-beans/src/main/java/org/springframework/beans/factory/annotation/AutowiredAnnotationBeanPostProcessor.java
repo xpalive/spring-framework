@@ -479,13 +479,14 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		InjectionMetadata metadata = this.injectionMetadataCache.get(cacheKey);
 		// dcl double check lock
 		if (InjectionMetadata.needsRefresh(metadata, clazz)) {
+			// 加锁再获取一次
 			synchronized (this.injectionMetadataCache) {
 				metadata = this.injectionMetadataCache.get(cacheKey);
 				if (InjectionMetadata.needsRefresh(metadata, clazz)) {
 					if (metadata != null) {
 						metadata.clear(pvs);
 					}
-					// 注入点
+					// 构建依赖注入点
 					metadata = buildAutowiringMetadata(clazz);
 					// 缓存注入点信息
 					this.injectionMetadataCache.put(cacheKey, metadata);

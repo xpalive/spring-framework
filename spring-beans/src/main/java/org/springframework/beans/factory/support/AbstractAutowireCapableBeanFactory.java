@@ -604,12 +604,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					//处理BeanDefinition的PostProcessors
 					//依赖注入的PostProcessor，
 					// AutowiredAnnotationBeanPostProcessor，CommonAnnotationBeanPostProcessor 初始化注入信息并缓存
+					// 生成注入点信息，并缓存在对应的PostProcessor对象的缓存Map中
 					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
 				}
 				catch (Throwable ex) {
 					throw new BeanCreationException(mbd.getResourceDescription(), beanName,
 							"Post-processing of merged bean definition failed", ex);
 				}
+				// 标记BeanDefinition已经处理过注入点信息了
 				mbd.postProcessed = true;
 			}
 		}
@@ -627,6 +629,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 						"' to allow for resolving potential circular references");
 			}
 			// 将BeanName作为Key添加三级缓存
+			// getEarlyBeanReference 用于判断是否需要生成早期的代理对象
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
 
@@ -1469,8 +1472,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 			for (InstantiationAwareBeanPostProcessor bp : getBeanPostProcessorCache().instantiationAware) {
 				//postProcessor，后置处理器进行属性的处理
-				// AutowireAnnotationBeanPostProcessor
+				// ConfigurationClassPostProcessor
 				// CommonAnnotationBeanPostProcessor
+				// AutowireAnnotationBeanPostProcessor
 				PropertyValues pvsToUse = bp.postProcessProperties(pvs, bw.getWrappedInstance(), beanName);
 				if (pvsToUse == null) {
 					if (filteredPds == null) {
