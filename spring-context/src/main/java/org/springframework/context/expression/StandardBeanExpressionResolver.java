@@ -144,6 +144,7 @@ public class StandardBeanExpressionResolver implements BeanExpressionResolver {
 		try {
 			Expression expr = this.expressionCache.get(value);
 			if (expr == null) {
+				// this.expressionParser => SpelExpressionParser
 				expr = this.expressionParser.parseExpression(value, this.beanExpressionParserContext);
 				this.expressionCache.put(value, expr);
 			}
