@@ -501,7 +501,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			return InjectionMetadata.EMPTY;
 		}
 
-		// 需要注入的元素
+		// 需要注入的元素,存储当前类中需要注入的属性值，封装为AutowiredFieldElement
 		List<InjectionMetadata.InjectedElement> elements = new ArrayList<>();
 		Class<?> targetClass = clazz;
 
@@ -511,9 +511,10 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 			//属性注入点
 			ReflectionUtils.doWithLocalFields(targetClass, field -> {
+				// 找到被注解的字段（@Autowired或@Value）
 				MergedAnnotation<?> ann = findAutowiredAnnotation(field);
 				if (ann != null) {
-					//静态方法跳过
+					//静态属性跳过
 					if (Modifier.isStatic(field.getModifiers())) {
 						if (logger.isInfoEnabled()) {
 							logger.info("Autowired annotation is not supported on static fields: " + field);

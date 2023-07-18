@@ -152,11 +152,16 @@ public class PropertyPlaceholderHelper {
 				// Now obtain the value for the fully resolved key...
 				String propVal = placeholderResolver.resolvePlaceholder(placeholder);
 				if (propVal == null && this.valueSeparator != null) {
+					// 处理默认值 this.valueSeparator -> :
+					// 如果存在默认值 如 ${xxxx:true}
 					int separatorIndex = placeholder.indexOf(this.valueSeparator);
 					if (separatorIndex != -1) {
+						// 取出真实的key
 						String actualPlaceholder = placeholder.substring(0, separatorIndex);
+						// 出去真实的值
 						String defaultValue = placeholder.substring(separatorIndex + this.valueSeparator.length());
 						propVal = placeholderResolver.resolvePlaceholder(actualPlaceholder);
+						// 如果没有key没有获取到配置的值，这返回默认值
 						if (propVal == null) {
 							propVal = defaultValue;
 						}
