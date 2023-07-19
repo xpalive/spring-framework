@@ -179,7 +179,7 @@ public class PropertySourcesPlaceholderConfigurer extends PlaceholderConfigurerS
 			}
 			return (resolved.equals(this.nullValue) ? null : resolved);
 		};
-
+		// valueResolver 返回了一个匿名类
 		doProcessProperties(beanFactoryToProcess, valueResolver);
 	}
 
