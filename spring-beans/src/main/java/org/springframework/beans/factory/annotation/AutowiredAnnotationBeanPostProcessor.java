@@ -425,7 +425,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	@Override
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
-		// 寻找注入点，并存储再metadata中
+		// 寻找注入点，并存储再metadata中，在postProcessMergedBeanDefinition方法中已经缓存，这里直接用缓存
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass(), pvs);
 		try {
 			metadata.inject(bean, beanName, pvs);
@@ -480,13 +480,14 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		InjectionMetadata metadata = this.injectionMetadataCache.get(cacheKey);
 		// dcl double check lock
 		if (InjectionMetadata.needsRefresh(metadata, clazz)) {
+			// 加锁再获取一次
 			synchronized (this.injectionMetadataCache) {
 				metadata = this.injectionMetadataCache.get(cacheKey);
 				if (InjectionMetadata.needsRefresh(metadata, clazz)) {
 					if (metadata != null) {
 						metadata.clear(pvs);
 					}
-					// 注入点
+					// 构建依赖注入点
 					metadata = buildAutowiringMetadata(clazz);
 					// 缓存注入点信息
 					this.injectionMetadataCache.put(cacheKey, metadata);
@@ -503,7 +504,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 			return InjectionMetadata.EMPTY;
 		}
 
-		// 需要注入的元素
+		// 需要注入的元素,存储当前类中需要注入的属性值，封装为AutowiredFieldElement
 		List<InjectionMetadata.InjectedElement> elements = new ArrayList<>();
 		Class<?> targetClass = clazz;
 
@@ -513,9 +514,10 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 			//属性注入点
 			ReflectionUtils.doWithLocalFields(targetClass, field -> {
+				// 找到被注解的字段（@Autowired或@Value）
 				MergedAnnotation<?> ann = findAutowiredAnnotation(field);
 				if (ann != null) {
-					//静态属性 跳过
+					//静态属性跳过
 					if (Modifier.isStatic(field.getModifiers())) {
 						if (logger.isInfoEnabled()) {
 							logger.info("Autowired annotation is not supported on static fields: " + field);

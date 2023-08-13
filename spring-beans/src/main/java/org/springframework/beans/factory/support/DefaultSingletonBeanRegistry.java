@@ -466,6 +466,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		}
 	}
 
+	// 这里的alreadySeen 是将dependentBeans里面的扫描过的bean做一个缓存，可以快速跳过已处理的Bean
 	private boolean isDependent(String beanName, String dependentBeanName, @Nullable Set<String> alreadySeen) {
 		if (alreadySeen != null && alreadySeen.contains(beanName)) {
 			return false;

@@ -255,7 +255,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		Object beanInstance;
 
 		// Eagerly check singleton cache for manually registered singletons.
-		// 如果在单例池有获取到实例，第一次都是获取不到Bean的
+		// 尝试在缓存中获取单例bean，每个bean第一次获取都返回null
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
 			if (logger.isTraceEnabled()) {
@@ -274,7 +274,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		else {
 			// Fail if we're already creating this bean instance:
 			// We're assumably within a circular reference.
-			// 判断是否是原型bean，并且在创建中
+			// 判断是否是原型bean，并且在创建中，在当前ThreadLocal中获取
 			if (isPrototypeCurrentlyInCreation(beanName)) {
 				throw new BeanCurrentlyInCreationException(beanName);
 			}
@@ -331,7 +331,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 							throw new BeanCreationException(mbd.getResourceDescription(), beanName,
 									"Circular depends-on relationship between '" + beanName + "' and '" + dep + "'");
 						}
-						//将依赖关系缓存
+						//将依赖关系缓存,将依赖的beanName作为key存储他对应的依赖关系
 						registerDependentBean(dep, beanName);
 						try {
 							//创建被依赖的bean
@@ -347,7 +347,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				// Create bean instance.
 				// 如果是单例
 				if (mbd.isSingleton()) {
-					// 获取单例bean
+					// 获取单例bean,如果还是没有从单例池中获取到Bean，则会标记bean正在创建，且开始执行
+					// lambda表达式中的逻辑
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
 							//创建Bean对象
@@ -368,6 +369,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					// It's a prototype -> create a new instance.
 					Object prototypeInstance = null;
 					try {
+						//将原型bean的beanName存储到ThreadLocal中
 						beforePrototypeCreation(beanName);
 						prototypeInstance = createBean(beanName, mbd, args);
 					}
@@ -957,6 +959,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			return null;
 		}
 		String result = value;
+		// 获取到解析器
 		for (StringValueResolver resolver : this.embeddedValueResolvers) {
 			result = resolver.resolveStringValue(result);
 			if (result == null) {
@@ -1664,6 +1667,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				scope = getRegisteredScope(scopeName);
 			}
 		}
+		// StandardBeanExpressionResolver
 		return this.beanExpressionResolver.evaluate(value, new BeanExpressionContext(this, scope));
 	}
 
