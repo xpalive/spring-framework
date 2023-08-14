@@ -343,6 +343,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);
 		// 如果不需要代理则直接返回bean，否则返回代理对象
 		if (specificInterceptors != DO_NOT_PROXY) {
+			// 记录某个bean已经被aop了
 			this.advisedBeans.put(cacheKey, Boolean.TRUE);
 			// new SingletonTargetSource(bean) 创建一个targetSource
 			// 传入匹配的advisor specificInterceptors

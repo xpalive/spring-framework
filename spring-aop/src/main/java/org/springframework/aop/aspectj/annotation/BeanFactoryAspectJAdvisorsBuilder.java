@@ -89,6 +89,7 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 				if (aspectNames == null) {
 					List<Advisor> advisors = new ArrayList<>();
 					aspectNames = new ArrayList<>();
+					// 获取beanFactory中的所有的Bean
 					String[] beanNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
 							this.beanFactory, Object.class, true, false);
 					for (String beanName : beanNames) {
@@ -103,9 +104,12 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 						}
 						// 判断是否存在@Aspect注解
 						if (this.advisorFactory.isAspect(beanType)) {
-							// 报错切面beanName
+							// 保存切面beanName
 							aspectNames.add(beanName);
+							// 获取前面Bean的元信息
 							AspectMetadata amd = new AspectMetadata(beanType, beanName);
+							// 如果@Aspect不是perthis,pertarget,那么一个切面只会生成一个对象
+							// 并且会将该切面中所有对应的Advisor对象进行缓存
 							if (amd.getAjType().getPerClause().getKind() == PerClauseKind.SINGLETON) {
 								// 构造一个工厂
 								MetadataAwareAspectInstanceFactory factory =
