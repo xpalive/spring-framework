@@ -469,6 +469,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		}
 
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
+		// 将过滤出来的advisor设置到代理对象中
 		proxyFactory.addAdvisors(advisors);
 		// 设置代理对象
 		proxyFactory.setTargetSource(targetSource);

@@ -98,7 +98,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 		// @EnableAspectJAutoProxy 注入的BeanPostprocess是AnnotationAwareAspectJAutoProxyCreator
 		// 这里的findCandidateAdvisors就是AnnotationAwareAspectJAutoProxyCreator中的方法
 		List<Advisor> candidateAdvisors = findCandidateAdvisors();
-		// 赛选advisor
+		// 筛选advisor
 		List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(candidateAdvisors, beanClass, beanName);
 		extendAdvisors(eligibleAdvisors);
 		if (!eligibleAdvisors.isEmpty()) {
