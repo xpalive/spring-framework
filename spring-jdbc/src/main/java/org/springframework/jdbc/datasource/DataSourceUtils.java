@@ -180,6 +180,7 @@ public abstract class DataSourceUtils {
 
 		boolean debugEnabled = logger.isDebugEnabled();
 		// Set read-only flag.
+		// 设置只读
 		if (definition != null && definition.isReadOnly()) {
 			try {
 				if (debugEnabled) {

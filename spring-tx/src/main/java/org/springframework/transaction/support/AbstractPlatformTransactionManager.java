@@ -350,6 +350,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 		// 判断是否开启过事务
 		if (isExistingTransaction(transaction)) {
 			// Existing transaction found -> check propagation behavior to find out how to behave.
+			// 如果存在事务则直接返回
 			return handleExistingTransaction(def, transaction, debugEnabled);
 		}
 
@@ -363,6 +364,7 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 			throw new IllegalTransactionStateException(
 					"No existing transaction found for transaction marked with propagation 'mandatory'");
 		}
+		// 没有事务的情况下，以下三个事务都需要新开启事务
 		else if (def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRED ||
 				def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRES_NEW ||
 				def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NESTED) {
@@ -397,10 +399,13 @@ public abstract class AbstractPlatformTransactionManager implements PlatformTran
 	private TransactionStatus startTransaction(TransactionDefinition definition, Object transaction,
 			boolean debugEnabled, @Nullable SuspendedResourcesHolder suspendedResources) {
 
+		// 是否开启一个新的事务
 		boolean newSynchronization = (getTransactionSynchronization() != SYNCHRONIZATION_NEVER);
+		// 事务的定义/用来保存数据库连接的对象/是否是新的事务/是否是新的TransactionSynchronization
 		DefaultTransactionStatus status = newTransactionStatus(
 				definition, transaction, true, newSynchronization, debugEnabled, suspendedResources);
 		// 开启事务
+		// DataSourceTransactionalManager.doBegin
 		doBegin(transaction, definition);
 		prepareSynchronization(status, definition);
 		return status;
