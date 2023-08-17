@@ -16,15 +16,15 @@
 
 package org.springframework.transaction.interceptor;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-
 import org.springframework.aop.ClassFilter;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.lang.Nullable;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.util.ObjectUtils;
+
+import java.io.Serializable;
+import java.lang.reflect.Method;
 
 /**
  * Abstract class that implements a Pointcut that matches if the underlying
@@ -36,14 +36,22 @@ import org.springframework.util.ObjectUtils;
 @SuppressWarnings("serial")
 abstract class TransactionAttributeSourcePointcut extends StaticMethodMatcherPointcut implements Serializable {
 
+	// 这里ClassFilter使用了一个内部类，过滤了事物相关的类
+	// TransactionalProxy
+	// TransactionManager
+	// PersistenceExceptionTranslator
+	// 其他逻辑由TransactionAttributeSourceClassFilter实现
 	protected TransactionAttributeSourcePointcut() {
 		setClassFilter(new TransactionAttributeSourceClassFilter());
 	}
 
 
+	// 方法过滤器直接由TransactionAttributeSourceClassFilter实现
 	@Override
 	public boolean matches(Method method, Class<?> targetClass) {
 		TransactionAttributeSource tas = getTransactionAttributeSource();
+		// 调用 AnnotationTransactionAttributeSource 的父类
+		// AbstractFallTransactionAttributeSource中的方法getTransactionAttribute
 		return (tas == null || tas.getTransactionAttribute(method, targetClass) != null);
 	}
 
@@ -74,6 +82,7 @@ abstract class TransactionAttributeSourcePointcut extends StaticMethodMatcherPoi
 	 * Obtain the underlying TransactionAttributeSource (may be {@code null}).
 	 * To be implemented by subclasses.
 	 */
+	// AnnotationTransactionAttributeSource
 	@Nullable
 	protected abstract TransactionAttributeSource getTransactionAttributeSource();
 
