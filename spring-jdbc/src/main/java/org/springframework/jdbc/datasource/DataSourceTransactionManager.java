@@ -263,7 +263,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 			// 如果当前线程中所有使用的DataSource还没有创建过数据库连接，就获取一个数据库连接
 			if (!txObject.hasConnectionHolder() ||
 					txObject.getConnectionHolder().isSynchronizedWithTransaction()) {
-				// 获取数据库链接
+				// 通过dataSource对象获取数据库链接  <eng>obtain 获得</eng>
 				Connection newCon = obtainDataSource().getConnection();
 				if (logger.isDebugEnabled()) {
 					logger.debug("Acquired Connection [" + newCon + "] for JDBC transaction");
@@ -276,14 +276,16 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 			// 再获取对象
 			con = txObject.getConnectionHolder().getConnection();
 
-			//
+			// 根据@Tansactional注解中的配置，设置connection的readOnly和Connection的隔离级别
 			Integer previousIsolationLevel = DataSourceUtils.prepareConnectionForTransaction(con, definition);
+			// 设置spring事务的隔离级别和readOnly属性
 			txObject.setPreviousIsolationLevel(previousIsolationLevel);
 			txObject.setReadOnly(definition.isReadOnly());
 
 			// Switch to manual commit if necessary. This is very expensive in some JDBC drivers,
 			// so we don't want to do it unnecessarily (for example if we've explicitly
 			// configured the connection pool to set it already).
+			// 设置手动提交
 			if (con.getAutoCommit()) {
 				txObject.setMustRestoreAutoCommit(true);
 				if (logger.isDebugEnabled()) {
@@ -293,10 +295,13 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 				con.setAutoCommit(false);
 			}
 
+			// 设置 Statement stmt 的readonly 语法
 			prepareTransactionalConnection(con, definition);
 			txObject.getConnectionHolder().setTransactionActive(true);
 
+			// 从注解中获取超时时间
 			int timeout = determineTimeout(definition);
+			// 设置超时时间
 			if (timeout != TransactionDefinition.TIMEOUT_DEFAULT) {
 				txObject.getConnectionHolder().setTimeoutInSeconds(timeout);
 			}

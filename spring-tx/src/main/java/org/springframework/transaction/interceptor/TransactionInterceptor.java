@@ -117,6 +117,7 @@ public class TransactionInterceptor extends TransactionAspectSupport implements 
 
 		// Adapt to TransactionAspectSupport's invokeWithinTransaction...
 
+		// 处理事务 invokeWithinTransaction
 		return invokeWithinTransaction(invocation.getMethod(), targetClass, new CoroutinesInvocationCallback() {
 			@Override
 			@Nullable

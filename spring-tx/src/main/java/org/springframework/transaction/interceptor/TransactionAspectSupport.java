@@ -379,12 +379,15 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 
 		// 判断事务管理器类别 PlatformTransactionManager
 		PlatformTransactionManager ptm = asPlatformTransactionManager(tm);
+
 		final String joinpointIdentification = methodIdentification(method, targetClass, txAttr);
 
 		if (txAttr == null || !(ptm instanceof CallbackPreferringPlatformTransactionManager)) {
 			// Standard transaction demarcation with getTransaction and commit/rollback calls.
-			// 开启事务
+			// 开启事务 txInfo 和 txInfo.getTransactionStatus() 对于每个事务方法来说都有一个对象与之对应
+			// 包含挂起的事务
 			TransactionInfo txInfo = createTransactionIfNecessary(ptm, txAttr, joinpointIdentification);
+
 
 			Object retVal;
 			try {
@@ -599,7 +602,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 		TransactionStatus status = null;
 		if (txAttr != null) {
 			if (tm != null) {
-				// 开启事务
+				// 开启事务 tm -> DataSourceTransactionManager AbstractPlatformTransactionManager
 				status = tm.getTransaction(txAttr);
 			}
 			else {
@@ -675,6 +678,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 				logger.trace("Completing transaction for [" + txInfo.getJoinpointIdentification() +
 						"] after exception: " + ex);
 			}
+			// transactionAttribute -> RuleBasedTransactionAttribute
 			if (txInfo.transactionAttribute != null && txInfo.transactionAttribute.rollbackOn(ex)) {
 				try {
 					// 执行回滚操作
