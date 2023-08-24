@@ -47,7 +47,7 @@ public class ProxyTransactionManagementConfiguration extends AbstractTransaction
 			TransactionAttributeSource transactionAttributeSource, TransactionInterceptor transactionInterceptor) {
 
 		BeanFactoryTransactionAttributeSourceAdvisor advisor = new BeanFactoryTransactionAttributeSourceAdvisor();
-		// 作为pointcut构建的参数
+		// 作为pointcut构建的参数，为advisor的pointcut提供过滤方法
 		advisor.setTransactionAttributeSource(transactionAttributeSource);
 		// 设置一个事务拦截器
 		advisor.setAdvice(transactionInterceptor);
