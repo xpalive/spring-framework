@@ -603,7 +603,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				onRefresh();
 
 				// Check for listener beans and register them.
-				// 注册监听器,此处会对beanPostProcessor进行一次分类(每次新注册postProcessor就会重新缓存分类一次)
+				// ？（需要重新看代码并注释20230904）注册监听器,此处会对beanPostProcessor进行一次分类(每次新注册postProcessor就会重新缓存分类一次)
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
