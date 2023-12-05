@@ -268,6 +268,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 			}
 			//将原本的名字和处理后的名字都传入
+			// 处理FactoryBean
 			beanInstance = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 
