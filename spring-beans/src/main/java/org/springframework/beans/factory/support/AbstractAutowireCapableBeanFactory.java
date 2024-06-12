@@ -628,7 +628,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				logger.trace("Eagerly caching bean '" + beanName +
 						"' to allow for resolving potential circular references");
 			}
-			// 将BeanName作为Key添加三级缓存
+			// 将BeanName作为Key添加三级缓存，并将创建代理对象的逻辑存储起来
 			// getEarlyBeanReference 用于判断是否需要生成早期的代理对象
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
@@ -1221,7 +1221,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			return obtainFromSupplier(instanceSupplier, beanName);
 		}
 
-		//@Bean对于的BeanDefinition
+		//@Bean对应的BeanDefinition
 		// ？这里是哪塞的值
 		if (mbd.getFactoryMethodName() != null) {
 			return instantiateUsingFactoryMethod(beanName, mbd, args);
@@ -1920,6 +1920,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		if (mbd != null && bean.getClass() != NullBean.class) {
 			//制定的初始化名字? 解析的xml，注解不支持？（不确定）
+			//@Bean 通过指定方法来确认方法（@Bean(initMethod="init")）
 			String initMethodName = mbd.getInitMethodName();
 			if (StringUtils.hasLength(initMethodName) &&
 					!(isInitializingBean && "afterPropertiesSet".equals(initMethodName)) &&
