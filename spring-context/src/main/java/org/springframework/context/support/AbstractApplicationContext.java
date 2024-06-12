@@ -579,14 +579,18 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// 在这里扫描了类,并生成了beanDefinition
 				// 此处会对beanPostProcessor进行一次分类(每次新注册postProcessor就会重新缓存分类一次)
 				// BeanFactoryPostProcessor 和 BeanDefinitionRegistryPostProcessor 进行请求处理
-				// 其中 ConfigurationClassPostProcessor 负责处理配置类
+				// 其中 ConfigurationClassPostProcessor 负责处理配置类及其对应的BeanDefinition的生成和注册
 				// 对BeanFactoryPostProcessor的处理
 				// @Component,@PropertySources,@ComponentScans
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
-				// 注册BeanPostProcessors,此处会对beanPostProcessor进行一次分类(每次新注册postProcessor就会重新缓存分类一次)
-				// 对BeanPostProcessor的处理
+				// 从BeanDefinitionNames中找到所有的BeanPostProcessor
+				// 通过getBean对找到的BeanPostProcessor进行实例化，
+				// 调整BeanPostProcessor的顺序注册到BeanFactory中
+				// BeanPostProcessor的排序规则为，PriorityOrdered的排第一，Ordered排第二，没有任何排序接口的排第三
+				// 实现了MergedBeanDefinitionPostProcessor的排第四，其中也分PriorityOrdered，Ordered和没有任何排序接口的
+				// 以上述顺序注册在BeanFactory的beanPostProcessors的属性中
 				registerBeanPostProcessors(beanFactory);
 				beanPostProcess.end();
 

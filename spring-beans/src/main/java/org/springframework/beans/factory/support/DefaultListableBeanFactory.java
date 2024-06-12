@@ -1044,6 +1044,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					List<String> updatedDefinitions = new ArrayList<>(this.beanDefinitionNames.size() + 1);
 					updatedDefinitions.addAll(this.beanDefinitionNames);
 					updatedDefinitions.add(beanName);
+					// 原因1：beanDefinitionNames是被volatile修饰的，修改了对象的引用可保证其对多线程的可见性
 					this.beanDefinitionNames = updatedDefinitions;
 					removeManualSingletonName(beanName);
 				}
