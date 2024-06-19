@@ -1371,10 +1371,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 */
 	protected RootBeanDefinition getMergedLocalBeanDefinition(String beanName) throws BeansException {
 		// Quick check on the concurrent map first, with minimal locking.
+		// 先确认是否是已经合并过的，这里最常见的情况是父beanDefinition已经合并过了，当其他子beanDefinition再次
+		// 请求该父beanDefinition的时候就直接从缓存中获取
 		RootBeanDefinition mbd = this.mergedBeanDefinitions.get(beanName);
 		if (mbd != null && !mbd.stale) {
 			return mbd;
 		}
+		// 从扫描的BeanDefinition的map中获取
 		return getMergedBeanDefinition(beanName, getBeanDefinition(beanName));
 	}
 
@@ -1411,6 +1414,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			RootBeanDefinition previous = null;
 
 			// Check with full lock now in order to enforce the same merged instance.
+			// 在加锁的情况下再次获取rootBeanDefinition，如果不为空直接返回，否则开始处理beanDefinition的逻辑
 			if (containingBd == null) {
 				mbd = this.mergedBeanDefinitions.get(beanName);
 			}
@@ -1432,6 +1436,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					try {
 						String parentBeanName = transformedBeanName(bd.getParentName());
 						if (!beanName.equals(parentBeanName)) {
+							// 递归查找父definition
 							pbd = getMergedBeanDefinition(parentBeanName);
 						}
 						else {
@@ -1471,6 +1476,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				// Cache the merged bean definition for the time being
 				// (it might still get re-merged later on in order to pick up metadata changes)
 				if (containingBd == null && isCacheBeanMetadata()) {
+					// 缓存处理好的RootBeanDefinition
 					this.mergedBeanDefinitions.put(beanName, mbd);
 				}
 			}
@@ -1710,6 +1716,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		if (result == null) {
 			Class<?> beanType = predictBeanType(beanName, mbd, FactoryBean.class);
 			result = (beanType != null && FactoryBean.class.isAssignableFrom(beanType));
+			// 缓存当前bean是否是FactoryBean，缓存到当前bean的BeanDefinition中
 			mbd.isFactoryBean = result;
 		}
 		return result;
@@ -1896,6 +1903,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				throw new BeanIsNotAFactoryException(beanName, beanInstance.getClass());
 			}
 			if (mbd != null) {
+				// 更新beanDefinition缓存
 				mbd.isFactoryBean = true;
 			}
 			return beanInstance;
@@ -1916,6 +1924,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		}
 		else {
 			//从缓存中获取factoryBean的getObject对象
+			// factoryBeanObjectCache
 			object = getCachedObjectForFactoryBean(beanName);
 		}
 		if (object == null) {
