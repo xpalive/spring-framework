@@ -152,6 +152,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+		// 请求初始化方法InitMethods，这里是@PostConstruct注释的方法
 		LifecycleMetadata metadata = findLifecycleMetadata(bean.getClass());
 		try {
 			metadata.invokeInitMethods(bean, beanName);
@@ -226,9 +227,9 @@ public class InitDestroyAnnotationBeanPostProcessor
 		Class<?> targetClass = clazz;
 
 		do {
-			// 初始化方法
+			// 初始化方法 @PostConstruct
 			final List<LifecycleElement> currInitMethods = new ArrayList<>();
-			// 销毁方法
+			// 销毁方法 @PreDestroy
 			final List<LifecycleElement> currDestroyMethods = new ArrayList<>();
 
 			ReflectionUtils.doWithLocalMethods(targetClass, method -> {
