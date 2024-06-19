@@ -58,6 +58,7 @@ public class ScannedGenericBeanDefinition extends GenericBeanDefinition implemen
 	 */
 	public ScannedGenericBeanDefinition(MetadataReader metadataReader) {
 		Assert.notNull(metadataReader, "MetadataReader must not be null");
+		// 注解信息
 		this.metadata = metadataReader.getAnnotationMetadata();
 		setBeanClassName(this.metadata.getClassName());
 		setResource(metadataReader.getResource());

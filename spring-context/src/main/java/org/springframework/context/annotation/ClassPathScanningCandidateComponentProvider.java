@@ -418,6 +418,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 		try {
 			String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
 					resolveBasePackage(basePackage) + '/' + this.resourcePattern;
+			// 通过路径获取路径下的class文件
 			Resource[] resources = getResourcePatternResolver().getResources(packageSearchPath);
 			boolean traceEnabled = logger.isTraceEnabled();
 			boolean debugEnabled = logger.isDebugEnabled();
@@ -428,7 +429,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 				}
 				if (resource.isReadable()) {
 					try {
-						//元数据读取
+						//元数据读取 asm技术  CachingMetadataReaderFactory;
 						MetadataReader metadataReader = getMetadataReaderFactory().getMetadataReader(resource);
 						//是否是excludeFilters 、或 includeFilters包含
 						if (isCandidateComponent(metadataReader)) {
@@ -498,6 +499,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 		}
 		for (TypeFilter tf : this.includeFilters) {
 			if (tf.match(metadataReader, getMetadataReaderFactory())) {
+				// 判断条件
 				return isConditionMatch(metadataReader);
 			}
 		}
@@ -528,7 +530,7 @@ public class ClassPathScanningCandidateComponentProvider implements EnvironmentC
 	 */
 	protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
 		AnnotationMetadata metadata = beanDefinition.getMetadata();
-		//isIndependent是否是独立的，不是内部类
+		//isIndependent是否是独立的，不是内部类(直接可以初始化的类)  内部类 -> User$Member.class
 		//isConcrete 不是接口或抽象类
 		//如果是抽象类，但是有被Lookup注解的方法
 		return (metadata.isIndependent() && (metadata.isConcrete() ||
