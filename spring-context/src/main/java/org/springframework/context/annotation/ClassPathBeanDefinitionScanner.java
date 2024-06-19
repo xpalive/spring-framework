@@ -285,14 +285,14 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 				//生成beanName -> AnnotationBeanNameGenerator
 				String beanName = this.beanNameGenerator.generateBeanName(candidate, this.registry);
 				if (candidate instanceof AbstractBeanDefinition) {
-					// 用扫描器的默认BeanDefinition填充扫描的BeanDefinition
+					// 用扫描器的默认BeanDefinition填充扫描的BeanDefinition，beanDefinitionDefaults相当于模版
 					postProcessBeanDefinition((AbstractBeanDefinition) candidate, beanName);
 				}
 				if (candidate instanceof AnnotatedBeanDefinition) {
 					// @Lazy @Primary @DependsOn @Role @Description
 					AnnotationConfigUtils.processCommonDefinitionAnnotations((AnnotatedBeanDefinition) candidate);
 				}
-				// 检测
+				// 检测 当前容器中是否包含当前的BeanName
 				if (checkCandidate(beanName, candidate)) {
 					BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(candidate, beanName);
 					// 代理？
@@ -356,6 +356,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 			existingDef = originatingDef;
 		}
 		// 兼容，新扫描的BeanDefinition和存在的BeanDefinition是否兼容
+		// 处理重复扫描
 		if (isCompatible(beanDefinition, existingDef)) {
 			return false;
 		}
