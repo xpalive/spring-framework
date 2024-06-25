@@ -4,12 +4,16 @@ import javax.annotation.PostConstruct;
 
 public class InitMethodBeanTest {
     
-    void init() {
+    public void init() {
         System.out.println("InitMethod init");
     }
     
     @PostConstruct
-    void postConstruct(){
+    public void postConstruct(){
         System.out.println("InitMethod postConstruct");
+    }
+    
+    public void close(){
+        System.out.println("close InitMethodBeanTest");
     }
 }

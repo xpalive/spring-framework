@@ -7,6 +7,7 @@ public class Test {
     
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        
 //        context.addBeanFactoryPostProcessor();
         context.registerShutdownHook();
         //		BeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(

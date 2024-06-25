@@ -523,6 +523,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// Prepare method overrides.
+		// @LookUp
 		try {
 			mbdToUse.prepareMethodOverrides();
 		}
@@ -605,6 +606,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					//依赖注入的PostProcessor，
 					// AutowiredAnnotationBeanPostProcessor，CommonAnnotationBeanPostProcessor 初始化注入信息并缓存
 					// 生成注入点信息，并缓存在对应的PostProcessor对象的缓存Map中
+					// 对beanDefinition进行操作，比如可以指定beanDefinition的initMethod
+					// 对属性赋值 mbd.getPropertyValues().add("xxx", new Object());
 					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
 				}
 				catch (Throwable ex) {
