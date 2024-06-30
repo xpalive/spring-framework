@@ -258,6 +258,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		this.injectionMetadataCache.remove(beanName);
 	}
 
+	// 推断构造方法
 	@Override
 	@Nullable
 	public Constructor<?>[] determineCandidateConstructors(Class<?> beanClass, final String beanName)
@@ -301,6 +302,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		}
 
 		// Quick check on the concurrent map first, with minimal locking.
+		// 在缓存中获取构造方法
 		Constructor<?>[] candidateConstructors = this.candidateConstructorsCache.get(beanClass);
 		if (candidateConstructors == null) {
 			// Fully synchronized resolution now...
@@ -318,7 +320,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 								"] from ClassLoader [" + beanClass.getClassLoader() + "] failed", ex);
 					}
 					List<Constructor<?>> candidates = new ArrayList<>(rawCandidates.length);
-					// 记录require为True的构造方法
+					// 记录require为True的构造方法 ， 一个类中只能有一个@Autowired注解的构造方法
 					Constructor<?> requiredConstructor = null;
 					// 记录默认的构造方法
 					Constructor<?> defaultConstructor = null;
@@ -333,7 +335,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 						else if (primaryConstructor != null) {
 							continue;
 						}
-						// 查询构造方法上的注解
+						// 查询构造方法上的注解 @Autowired
 						MergedAnnotation<?> ann = findAutowiredAnnotation(candidate);
 						// 如果没有@Autowired注解
 						if (ann == null) {
@@ -353,13 +355,10 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 						}
 						// 如果有@Autowired注解
 						if (ann != null) {
-							// 如果第一次扫描到@AutoWired(required = true)
-							// requiredConstructor 就不等于null
-							// 第二次扫描到带有@Autowired 的构造方法就会报错
-
-							// 如果第一次扫描到@AutoWired(required = false)
-							// requiredConstructor 还是为空
-							// 第二次如果扫描到@Autowired(required = true) 那么就会报错
+							// 循环当前类所有的构造方法
+							// 当遇到第一个被标记@Autowired的构造方法时会被缓存到requiredConstructor中
+							// 当再次进入到此处，且requiredConstructor不为空，说明当前不止一个构造方法被注解了@Autowired方法
+							// 直接报错BeanCreationException异常
 							if (requiredConstructor != null) {
 								throw new BeanCreationException(beanName,
 										"Invalid autowire-marked constructor: " + candidate +
@@ -368,7 +367,8 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 							}
 							boolean required = determineRequiredStatus(ann);
 							if (required) {
-								// 如果候选的构造方法不为空，那么就抛错
+								// 当@Autowired方法的require属性为false时不会缓存requiredConstructor属性
+								// 但是会添加到candidates的集合中，所以还需要判断candidates是否是空
 								if (!candidates.isEmpty()) {
 									throw new BeanCreationException(beanName,
 											"Invalid autowire-marked constructors: " + candidates +

@@ -1236,7 +1236,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		boolean autowireNecessary = false;
 		if (args == null) {
 			synchronized (mbd.constructorArgumentLock) {
-				// 构造方法不为空
+				// 构造方法不为空 (原型bean的情况下，第二次获取该bean)
 				if (mbd.resolvedConstructorOrFactoryMethod != null) {
 					resolved = true;
 					// 构造方法的参数是否被缓存

@@ -1,5 +1,8 @@
 package com.xiongping;
 
+import com.xiongping.service.UserService2;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 
@@ -8,11 +11,11 @@ public class Test {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         
-//        context.addBeanFactoryPostProcessor();
+        //        context.addBeanFactoryPostProcessor();
         context.registerShutdownHook();
-        //		BeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(
-        //						UserService2.class)
-        //				.getBeanDefinition();
+//        BeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(UserService2.class)
+//                .getBeanDefinition();
+//        beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(new UserService2());
         
         context.publishEvent("123");
         //		context.register(AppConfig.class);
@@ -37,7 +40,8 @@ public class Test {
         String[] beanDefinitionNames = context.getBeanDefinitionNames();
         for (String beanDefinitionName : beanDefinitionNames) {
             System.out.println(
-                    "beanDefinitionName: " + beanDefinitionName + " class: " + context.getBean(beanDefinitionName).getClass());
+                    "beanDefinitionName: " + beanDefinitionName + " class: " + context.getBean(beanDefinitionName)
+                            .getClass());
             
         }
         
