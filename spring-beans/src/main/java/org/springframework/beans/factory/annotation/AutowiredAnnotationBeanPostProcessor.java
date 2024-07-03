@@ -369,6 +369,7 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 							if (required) {
 								// 当@Autowired方法的require属性为false时不会缓存requiredConstructor属性
 								// 但是会添加到candidates的集合中，所以还需要判断candidates是否是空
+								// 如果require都为false 则没有问题
 								if (!candidates.isEmpty()) {
 									throw new BeanCreationException(beanName,
 											"Invalid autowire-marked constructors: " + candidates +
@@ -385,7 +386,8 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 							defaultConstructor = candidate;
 						}
 					}
-					// 如果有多个构造方法
+					// 如果有多个构造方法(autowired 都为false)
+					// 如果只有一个构造方法(仅仅一个autowired为true)
 					if (!candidates.isEmpty()) {
 						// Add default constructor to list of optional constructors, as fallback.
 						// requiredConstructor 如果是null说明没有@Autowired标注为true的构造方法

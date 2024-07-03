@@ -25,8 +25,8 @@ public class InferredConstructTest {
         context.refresh();
         
         UserService userService = context.getBean("userService", UserService.class);
-        userService.getOrderService().print();
-        userService.getDepartmentService().print();
+//        userService.getOrderService().print();
+//        userService.getDepartmentService().print();
         userService.print();
         context.getBean("userService", UserService.class);
     }

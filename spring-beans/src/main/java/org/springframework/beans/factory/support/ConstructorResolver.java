@@ -134,7 +134,7 @@ class ConstructorResolver {
 		ArgumentsHolder argsHolderToUse = null;
 		Object[] argsToUse = null;
 
-		//如果指定了参数，那么就赋值给argsToUse
+		//如果指定了参数，那么就赋值给argsToUse 通过getBean指定参数
 		if (explicitArgs != null) {
 			argsToUse = explicitArgs;
 		}
