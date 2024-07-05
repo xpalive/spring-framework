@@ -130,8 +130,11 @@ class ConstructorResolver {
 		BeanWrapperImpl bw = new BeanWrapperImpl();
 		this.beanFactory.initBeanWrapper(bw);
 
+		// 缓存最终使用的构造方法
 		Constructor<?> constructorToUse = null;
+		// 缓存参数
 		ArgumentsHolder argsHolderToUse = null;
+		// 缓存参数
 		Object[] argsToUse = null;
 
 		//如果指定了参数，那么就赋值给argsToUse 通过getBean指定参数
@@ -155,6 +158,7 @@ class ConstructorResolver {
 			}
 		}
 
+		// 推断构造方法开始，没有确定的构造方法或没有确定的参数
 		if (constructorToUse == null || argsToUse == null) {
 			// Take specified constructors, if any.
 			Constructor<?>[] candidates = chosenCtors;
@@ -220,6 +224,7 @@ class ConstructorResolver {
 				}
 
 				ArgumentsHolder argsHolder;
+				// 获取参数类型
 				Class<?>[] paramTypes = candidate.getParameterTypes();
 				if (resolvedValues != null) {
 					try {
@@ -228,9 +233,11 @@ class ConstructorResolver {
 						if (paramNames == null) {
 							ParameterNameDiscoverer pnd = this.beanFactory.getParameterNameDiscoverer();
 							if (pnd != null) {
+								// 使用ASM技术进行参数解析
 								paramNames = pnd.getParameterNames(candidate);
 							}
 						}
+						// 找到参数类型和名称找到bean对象
 						argsHolder = createArgumentArray(beanName, mbd, resolvedValues, bw, paramTypes, paramNames,
 								getUserDeclaredConstructor(candidate), autowiring, candidates.length == 1);
 					}
@@ -794,6 +801,7 @@ class ConstructorResolver {
 							"] - did you specify the correct bean references as arguments?");
 				}
 				try {
+					// 这里的BeanName是当前创建的Bean的Name
 					Object autowiredArgument = resolveAutowiredArgument(
 							methodParam, beanName, autowiredBeanNames, converter, fallback);
 					args.rawArguments[paramIndex] = autowiredArgument;

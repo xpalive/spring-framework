@@ -1303,6 +1303,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	public Object resolveDependency(DependencyDescriptor descriptor, @Nullable String requestingBeanName,
 			@Nullable Set<String> autowiredBeanNames, @Nullable TypeConverter typeConverter) throws BeansException {
 		// getParameterNameDiscoverer 初始化BeanFactory时就有值了
+		// 这里会将之前通过asm解析的beanName通过ParameterNameDiscoverer的缓存获取，key为当前当前descriptor的类
 		descriptor.initParameterNameDiscovery(getParameterNameDiscoverer());
 		// 判断依赖的属性类型是否是Optional
 		if (Optional.class == descriptor.getDependencyType()) {

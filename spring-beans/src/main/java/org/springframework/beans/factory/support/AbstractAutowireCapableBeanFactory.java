@@ -590,6 +590,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 		if (instanceWrapper == null) {
 			// 实例化bean,在实例化bean的时候推断选择构造方法
+			// 只有在有多个被注解@Autowired方法的时候会进行构造方法的推断，且必须所有的@Autowired注解的require属性都必须为false
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 		Object bean = instanceWrapper.getWrappedInstance();
@@ -1236,10 +1237,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		boolean autowireNecessary = false;
 		if (args == null) {
 			synchronized (mbd.constructorArgumentLock) {
-				// 构造方法不为空 (原型bean的情况下，第二次获取该bean)
+				// 构造方法不为空 (原型bean的情况下，第二次获取该bean才会有resolvedConstructorOrFactoryMethod不为空的情况)
 				if (mbd.resolvedConstructorOrFactoryMethod != null) {
 					resolved = true;
-					// 构造方法的参数是否被缓存
+					// 构造方法的参数是否被缓存，如果被缓存了constructorArgumentsResolved会被修改为true
 					autowireNecessary = mbd.constructorArgumentsResolved;
 				}
 			}
@@ -1260,7 +1261,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Constructor<?>[] ctors = determineConstructorsFromBeanPostProcessors(beanClass, beanName);
 		if (ctors != null || mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR ||
 				mbd.hasConstructorArgumentValues() || !ObjectUtils.isEmpty(args)) {
-			// 使用构造方法自动注入
+			// 使用构造方法自动注入，这里会现推断使用哪个构造方法，再进行参数注入，最后返回对象实例
 			return autowireConstructor(beanName, mbd, ctors, args);
 		}
 
