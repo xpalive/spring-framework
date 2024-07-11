@@ -1227,7 +1227,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		//@Bean对应的BeanDefinition
-		// ？这里是哪塞的值
+		//扫描到@Bean的时候会设置@Bean对应的BeanDefinition中的FactoryMethodName属性
 		if (mbd.getFactoryMethodName() != null) {
 			return instantiateUsingFactoryMethod(beanName, mbd, args);
 		}
