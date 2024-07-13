@@ -562,6 +562,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			添加需要忽略的依赖接口，
 			注册依赖解析器，
 			添加bean后置处理器ApplicationListenerDetector
+			这里添加了两个beanPostProcessor:
+			ApplicationContextAwareProcessor
+			ApplicationListenerDetector
 			*/
 			prepareBeanFactory(beanFactory);
 
@@ -582,6 +585,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// 其中 ConfigurationClassPostProcessor 负责处理配置类及其对应的BeanDefinition的生成和注册
 				// 对BeanFactoryPostProcessor的处理
 				// @Component,@PropertySources,@ComponentScans
+				// 这里添加了一个beanPostProcessor:ConfigurationClassPostProcessor.ImportAwareBeanPostProcessor
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
