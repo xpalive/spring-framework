@@ -244,7 +244,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		}
 		this.registriesPostProcessed.add(registryId);
 
-		// 处理配置BeanDefinition
+		// 处理配置BeanDefinition 处理配置类
 		processConfigBeanDefinitions(registry);
 	}
 
@@ -347,6 +347,8 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			// 读取配置路径下的BeanDefinition
 			// 并缓存处理过的ConfigurationClass，有类信息生成
 			// 完成配置类的处理后会继续扫描beanDefinition，并将beanDefinition存储到BeanFactory中
+			
+			// 处理了配置类的 @Bean方法 @ImportSource
 			parser.parse(candidates);
 			parser.validate();
 
@@ -454,15 +456,18 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 							"is a non-static @Bean method with a BeanDefinitionRegistryPostProcessor " +
 							"return type: Consider declaring such methods as 'static'.");
 				}
+				// 将full类型的配置类加入一个集合
 				configBeanDefs.put(beanName, (AbstractBeanDefinition) beanDef);
 			}
 		}
+		// 如果没有full类型的配置类则结束当前方法
 		if (configBeanDefs.isEmpty() || NativeDetector.inNativeImage()) {
 			// nothing to enhance -> return immediately
 			enhanceConfigClasses.end();
 			return;
 		}
-
+		// 处理full类型的配置类
+		// 进行代理
 		ConfigurationClassEnhancer enhancer = new ConfigurationClassEnhancer();
 		for (Map.Entry<String, AbstractBeanDefinition> entry : configBeanDefs.entrySet()) {
 			AbstractBeanDefinition beanDef = entry.getValue();
@@ -470,12 +475,14 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			beanDef.setAttribute(AutoProxyUtils.PRESERVE_TARGET_CLASS_ATTRIBUTE, Boolean.TRUE);
 			// Set enhanced subclass of the user-specified bean class
 			Class<?> configClass = beanDef.getBeanClass();
+			// 生成代理类
 			Class<?> enhancedClass = enhancer.enhance(configClass, this.beanClassLoader);
 			if (configClass != enhancedClass) {
 				if (logger.isTraceEnabled()) {
 					logger.trace(String.format("Replacing bean definition '%s' existing class '%s' with " +
 							"enhanced class '%s'", entry.getKey(), configClass.getName(), enhancedClass.getName()));
 				}
+				// 将代理类设置到BeanClass属性中用于生成代理对象
 				beanDef.setBeanClass(enhancedClass);
 			}
 		}

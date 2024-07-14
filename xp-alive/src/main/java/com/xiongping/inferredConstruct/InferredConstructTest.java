@@ -5,7 +5,6 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan("com.xiongping.inferredConstruct")
 public class InferredConstructTest {
     
     
@@ -34,5 +33,8 @@ public class InferredConstructTest {
         //        userService.getDepartmentService().print();
         //        userService.print();
         //        context.getBean("userService", UserService.class);
+        DepartmentService bean = context.getBean(DepartmentService.class);
+        System.out.println(bean.getA());
+        System.out.println("");
     }
 }

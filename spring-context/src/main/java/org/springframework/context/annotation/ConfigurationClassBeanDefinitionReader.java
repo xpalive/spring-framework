@@ -150,10 +150,12 @@ class ConfigurationClassBeanDefinitionReader {
 
 		// @Import处理
 		if (configClass.isImported()) {
+			// 生成有Impart导入的类的BeanDefinition并注册
 			registerBeanDefinitionForImportedConfigurationClass(configClass);
 		}
 		// 处理@Bean标注的方法,生成BeanDefinition
 		for (BeanMethod beanMethod : configClass.getBeanMethods()) {
+			// 生成并注册有@Bean注解的 BeanDefinition
 			loadBeanDefinitionsForBeanMethod(beanMethod);
 		}
 
@@ -161,6 +163,7 @@ class ConfigurationClassBeanDefinitionReader {
 		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
 		// 处理@ImportBeanDefinitionRegistror 调用 registrar.registerBeanDefinitions
 		// 请求 ImportBeanDefinitionRegistrars.registerBeanDefinitions
+		// 注册BeanDefinition
 		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
 	}
 
@@ -222,6 +225,7 @@ class ConfigurationClassBeanDefinitionReader {
 
 		// Has this effectively been overridden before (e.g. via XML)?
 		if (isOverriddenByExistingDefinition(beanMethod, beanName)) {
+			// 当前@Bean的方法名对应的beanName和当前类的的beanName相同的情况下报错
 			if (beanName.equals(beanMethod.getConfigurationClass().getBeanName())) {
 				throw new BeanDefinitionStoreException(beanMethod.getConfigurationClass().getResource().getDescription(),
 						beanName, "Bean name derived from @Bean method '" + beanMethod.getMetadata().getMethodName() +
@@ -230,7 +234,8 @@ class ConfigurationClassBeanDefinitionReader {
 			return;
 		}
 
-		// 创建BeanDefinition
+		// 创建BeanDefinition 通过@Bean生成的BeanDefinition的类型为 ConfigurationClassBeanDefinition
+		// 这里的configClass指的是当前方法所在的类这个类是配置类，因为
 		ConfigurationClassBeanDefinition beanDef = new ConfigurationClassBeanDefinition(configClass, metadata, beanName);
 		beanDef.setSource(this.sourceExtractor.extractSource(metadata, configClass.getResource()));
 
