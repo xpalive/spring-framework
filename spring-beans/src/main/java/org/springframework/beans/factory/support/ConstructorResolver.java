@@ -175,7 +175,7 @@ class ConstructorResolver {
 				}
 			}
 
-			//如果只有一个构造方法
+			//如果只有一个构造方法 且没有参数
 			if (candidates.length == 1 && explicitArgs == null && !mbd.hasConstructorArgumentValues()) {
 				Constructor<?> uniqueCandidate = candidates[0];
 				if (uniqueCandidate.getParameterCount() == 0) {
@@ -200,6 +200,7 @@ class ConstructorResolver {
 				minNrOfArgs = explicitArgs.length;
 			}
 			else {
+				// 从beanDefinition中获取参数
 				ConstructorArgumentValues cargs = mbd.getConstructorArgumentValues();
 				resolvedValues = new ConstructorArgumentValues();
 				minNrOfArgs = resolveConstructorArguments(beanName, mbd, bw, cargs, resolvedValues);
@@ -233,11 +234,12 @@ class ConstructorResolver {
 						if (paramNames == null) {
 							ParameterNameDiscoverer pnd = this.beanFactory.getParameterNameDiscoverer();
 							if (pnd != null) {
-								// 使用ASM技术进行参数解析
+								// 使用ASM技术进行参数解析构造方法的参数名（形参名称）
 								paramNames = pnd.getParameterNames(candidate);
 							}
 						}
-						// 找到参数类型和名称找到bean对象
+						// 找到参数类型和名称，通过类型名称找到bean对象
+						// 还有如果类型
 						argsHolder = createArgumentArray(beanName, mbd, resolvedValues, bw, paramTypes, paramNames,
 								getUserDeclaredConstructor(candidate), autowiring, candidates.length == 1);
 					}
@@ -754,6 +756,9 @@ class ConstructorResolver {
 				// If we couldn't find a direct match and are not supposed to autowire,
 				// let's try the next generic, untyped argument value as fallback:
 				// it could match after type conversion (for example, String -> int).
+
+				// 如果指定了参数，那么如果推断确定的构造方法的参数数量与BeanDefinition中的参数数量一致
+				// ?
 				if (valueHolder == null && (!autowiring || paramTypes.length == resolvedValues.getArgumentCount())) {
 					valueHolder = resolvedValues.getGenericArgumentValue(null, null, usedValueHolders);
 				}
@@ -771,6 +776,7 @@ class ConstructorResolver {
 				else {
 					MethodParameter methodParam = MethodParameter.forExecutable(executable, paramIndex);
 					try {
+						// 根据类型和传入的值尝试转换成需要的类型
 						convertedValue = converter.convertIfNecessary(originalValue, paramType, methodParam);
 					}
 					catch (TypeMismatchException ex) {
