@@ -16,11 +16,11 @@
 
 package org.springframework.aop.framework;
 
-import java.io.Serializable;
-import java.lang.reflect.Proxy;
-
 import org.springframework.aop.SpringProxy;
 import org.springframework.core.NativeDetector;
+
+import java.io.Serializable;
+import java.lang.reflect.Proxy;
 
 /**
  * Default {@link AopProxyFactory} implementation, creating either a CGLIB proxy
@@ -40,10 +40,10 @@ import org.springframework.core.NativeDetector;
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Sebastien Deleuze
- * @since 12.03.2004
  * @see AdvisedSupport#setOptimize
  * @see AdvisedSupport#setProxyTargetClass
  * @see AdvisedSupport#setInterfaces
+ * @since 12.03.2004
  */
 @SuppressWarnings("serial")
 public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
@@ -64,8 +64,7 @@ public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
 			}
 			// 判断cglib代理
 			return new ObjenesisCglibAopProxy(config);
-		}
-		else {
+		} else {
 			return new JdkDynamicAopProxy(config);
 		}
 	}
@@ -76,6 +75,7 @@ public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
 	 * (or no proxy interfaces specified at all).
 	 */
 	private boolean hasNoUserSuppliedProxyInterfaces(AdvisedSupport config) {
+//		ProxyFactory.setInterfaces();
 		Class<?>[] ifcs = config.getProxiedInterfaces();
 		return (ifcs.length == 0 || (ifcs.length == 1 && SpringProxy.class.isAssignableFrom(ifcs[0])));
 	}
