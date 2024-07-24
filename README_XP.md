@@ -20,5 +20,7 @@ Project Structure -> Project Setting
     Kotilin 所有的模块都设置为Use project settings
 ```
 
+### gradle的配置不要轻易改动
+
 #### 知识点
 配置类增强：org.springframework.context.annotation.ConfigurationClassPostProcessor.enhanceConfigurationClasses
