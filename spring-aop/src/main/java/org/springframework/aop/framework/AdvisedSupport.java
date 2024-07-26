@@ -375,6 +375,8 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 	@Override
 	public void addAdvice(Advice advice) throws AopConfigException {
 		int pos = this.advisors.size();
+		// ProxyFactory子类调用该方法添加advice
+		// 这个advice会被封装成为匹配任何方法的advisor
 		addAdvice(pos, advice);
 	}
 
@@ -394,6 +396,7 @@ public class AdvisedSupport extends ProxyConfig implements Advised {
 			throw new AopConfigException("DynamicIntroductionAdvice may only be added as part of IntroductionAdvisor");
 		}
 		else {
+			// 封装为advisor，在DefaultPointcutAdvisor中会加入一个默认的切点，这个切点匹配任何方法任何类
 			addAdvisor(pos, new DefaultPointcutAdvisor(advice));
 		}
 	}
