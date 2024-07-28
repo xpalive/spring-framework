@@ -75,7 +75,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	protected Object[] getAdvicesAndAdvisorsForBean(
 			Class<?> beanClass, String beanName, @Nullable TargetSource targetSource) {
 
-		// 找到匹配的Advisor
+		// 找到匹配的Advisor， Eligible 合格的，有资格的
 		List<Advisor> advisors = findEligibleAdvisors(beanClass, beanName);
 		if (advisors.isEmpty()) {
 			return DO_NOT_PROXY;
@@ -98,7 +98,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 		// @EnableAspectJAutoProxy 注入的BeanPostprocess是AnnotationAwareAspectJAutoProxyCreator
 		// 这里的findCandidateAdvisors就是AnnotationAwareAspectJAutoProxyCreator中的方法
 		List<Advisor> candidateAdvisors = findCandidateAdvisors();
-		// 筛选advisor
+		// 筛选advisor ，匹配类和方法
 		List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(candidateAdvisors, beanClass, beanName);
 		extendAdvisors(eligibleAdvisors);
 		if (!eligibleAdvisors.isEmpty()) {
