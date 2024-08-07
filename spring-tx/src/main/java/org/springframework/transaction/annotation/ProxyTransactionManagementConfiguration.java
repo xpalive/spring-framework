@@ -57,7 +57,7 @@ public class ProxyTransactionManagementConfiguration extends AbstractTransaction
 		return advisor;
 	}
 
-	// 相当于pointCut，用于解析Transaction 创建bean注入到BeanFactoryTransactionAttributeSourceAdvisor
+	// 注解属性解析，是Pointcut中的一个注解解析器
 	@Bean
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 	public TransactionAttributeSource transactionAttributeSource() {

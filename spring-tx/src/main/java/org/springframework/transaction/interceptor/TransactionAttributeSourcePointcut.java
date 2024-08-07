@@ -36,7 +36,7 @@ import java.lang.reflect.Method;
 @SuppressWarnings("serial")
 abstract class TransactionAttributeSourcePointcut extends StaticMethodMatcherPointcut implements Serializable {
 
-	// 这里ClassFilter使用了一个内部类，过滤了事物相关的类
+	// 这里ClassFilter使用了一个内部类，过滤了事物相关的类，匹配类
 	// TransactionalProxy
 	// TransactionManager
 	// PersistenceExceptionTranslator
@@ -46,7 +46,7 @@ abstract class TransactionAttributeSourcePointcut extends StaticMethodMatcherPoi
 	}
 
 
-	// 方法过滤器直接由TransactionAttributeSourceClassFilter实现
+	// 方法过滤器直接由TransactionAttributeSourceClassFilter实现，匹配方法
 	@Override
 	public boolean matches(Method method, Class<?> targetClass) {
 		TransactionAttributeSource tas = getTransactionAttributeSource();
@@ -101,6 +101,7 @@ abstract class TransactionAttributeSourcePointcut extends StaticMethodMatcherPoi
 				return false;
 			}
 			TransactionAttributeSource tas = getTransactionAttributeSource();
+			// tas is AnnotationTransactionAttributeSource类
 			return (tas == null || tas.isCandidateClass(clazz));
 		}
 	}

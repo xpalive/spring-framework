@@ -174,7 +174,7 @@ public abstract class AbstractFallbackTransactionAttributeSource
 		Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);
 
 		// First try is the method in the target class.
-		// 返回的实现类是 RuleBasedTransactionAttribute
+		// 解析@Transactional注解，返回的实现类是 RuleBasedTransactionAttribute
 		TransactionAttribute txAttr = findTransactionAttribute(specificMethod);
 		if (txAttr != null) {
 			return txAttr;
