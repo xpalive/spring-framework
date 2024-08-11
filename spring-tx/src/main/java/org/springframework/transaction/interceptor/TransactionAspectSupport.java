@@ -380,6 +380,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 		// 判断事务管理器类别 PlatformTransactionManager
 		PlatformTransactionManager ptm = asPlatformTransactionManager(tm);
 
+		// 获取方法名作为事务名称
 		final String joinpointIdentification = methodIdentification(method, targetClass, txAttr);
 
 		if (txAttr == null || !(ptm instanceof CallbackPreferringPlatformTransactionManager)) {
