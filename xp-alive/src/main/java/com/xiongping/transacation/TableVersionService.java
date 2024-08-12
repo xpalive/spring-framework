@@ -12,7 +12,8 @@ public class TableVersionService {
     
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    
+
+    @Autowired
     private TableVersionService service;
     
     public void insert1() {
