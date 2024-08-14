@@ -295,7 +295,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 				con.setAutoCommit(false);
 			}
 
-			// 设置 Statement stmt 的readonly 语法
+			// 如果事务为readOnly则需要设置Statement为readOnly
 			prepareTransactionalConnection(con, definition);
 			txObject.getConnectionHolder().setTransactionActive(true);
 
