@@ -4,14 +4,15 @@ import com.xiongping.service.UserService2;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 
 public class Test {
     
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        
-        //        context.addBeanFactoryPostProcessor();
+		ConfigurableEnvironment environment = context.getEnvironment();
+		//        context.addBeanFactoryPostProcessor();
         context.registerShutdownHook();
 //        BeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(UserService2.class)
 //                .getBeanDefinition();

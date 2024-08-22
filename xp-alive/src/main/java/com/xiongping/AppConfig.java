@@ -1,10 +1,7 @@
 package com.xiongping;
 
 import com.xiongping.service.UserService;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -20,6 +17,7 @@ import javax.sql.DataSource;
 //@ComponentScan(value = "com.xiongping")
 @ComponentScan(value = "com.xiongping.utiltest")
 //@Import(UserService.class)
+@PropertySource("classpath:application.properties" )
 @EnableTransactionManagement // 开启事务
 @Configuration
 public class AppConfig {
