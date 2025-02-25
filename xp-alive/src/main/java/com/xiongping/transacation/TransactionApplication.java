@@ -19,7 +19,7 @@ public class TransactionApplication {
                 TransactionApplication.class);
     
         TableVersionService tableVersionService = (TableVersionService) context.getBean("tableVersionService");
-        tableVersionService.insert1();
+        tableVersionService.insert5();
         
     }
 }
