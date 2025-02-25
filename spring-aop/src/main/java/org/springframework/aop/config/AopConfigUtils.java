@@ -103,6 +103,7 @@ public abstract class AopConfigUtils {
 	public static void forceAutoProxyCreatorToUseClassProxying(BeanDefinitionRegistry registry) {
 		if (registry.containsBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME)) {
 			BeanDefinition definition = registry.getBeanDefinition(AUTO_PROXY_CREATOR_BEAN_NAME);
+			// 将代理对象中internalAutoProxyCreatord的proxyTargetClass属性设置为true，后续所有的代理对象都强制使用cglib
 			definition.getPropertyValues().add("proxyTargetClass", Boolean.TRUE);
 		}
 	}
